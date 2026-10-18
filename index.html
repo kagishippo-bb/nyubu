@@ -17,7 +17,7 @@
   --bg:#FFF8EC;--paper:#FFFFFF;--ink:#3A2412;--line:#5A3A1E;--orange:#F2A65A;--deep:#C9742E;--pink:#E4677A;--soft:#FBE6C8;--mute:#8A7563;
   --ui:"Zen Maru Gothic","Hiragino Maru Gothic ProN",sans-serif;--hand:"Yomogi","Zen Maru Gothic",sans-serif;
 }
-*{box-sizing:border-box}
+*{box-sizing:border-box;touch-action:manipulation}   /* つづけて押しても 拡大しない（脱出ゲームと同じ・10/18） */
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);-webkit-tap-highlight-color:transparent}
 main{max-width:520px;margin:0 auto;padding:20px 16px 48px}
 .top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
