@@ -59,6 +59,8 @@ input[type=text]:focus{background:#fff;box-shadow:0 0 0 3px rgba(242,166,90,.5)}
 .more a{color:var(--deep);font-weight:700}
 footer{margin-top:24px;text-align:center;font-size:12px;color:var(--mute)}
 </style>
+<!-- 何人が来たか（GoatCounter・クッキーなし・10/19） -->
+<script data-goatcounter="https://kagishippo.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
 <body>
 <main>
@@ -256,6 +258,7 @@ $('make').addEventListener('click', async () => {
   try {
     const cv = await draw(name);
     const blob = await new Promise(r => cv.toBlob(r, 'image/png'));
+    try { window.goatcounter && window.goatcounter.count({path: 'nyubu-make', title: '部員証を作った', event: true}); } catch (e) {}
     made = {name, blob, file: new File([blob], `kagishippo-nyubu-${number(name)}.png`, {type: 'image/png'})};
     $('card').src = URL.createObjectURL(blob);
     const text = shareText(name);
