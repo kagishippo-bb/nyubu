@@ -52,6 +52,27 @@
 .game-active .helpbar{min-height:44px!important;padding:2px 6px!important;border-radius:0;border-left:0;border-right:0}
 .game-active .helpbar .secondary{min-height:40px!important;padding:6px 14px!important}
 }
+
+/* 10/24 作者「どっちもやろう」：①スマホでは 時計・数・ヒントを 1本の 細い 帯にして、2枚の 絵の あいだに 置く（絵に かぶせない）②アプリの 中で 開いたら 1行 */
+.inapp-note{margin-top:8px!important;padding:6px 10px;border-radius:10px;background:#fff6dc;border:1px solid #ead5a5;font-size:12px!important;line-height:1.6!important}
+@media (max-width:700px){
+.game-active .pictures{display:contents!important}
+.game-active .wrap{justify-content:center}
+.game-active .picture-card{align-self:center}
+.game-active .picture-card:first-child{order:1}
+.game-active .midbar{order:2}
+.game-active .picture-card:last-child{order:3}
+.game-active .outcome{order:0}
+.game-active .scorebar,.game-active .helpbar{display:none!important}
+.midbar{display:none}
+.game-active .midbar{display:flex;align-items:center;justify-content:space-between;gap:6px;height:34px;padding:0 6px;width:100%;max-width:420px;align-self:center;flex:none;font-variant-numeric:tabular-nums}
+.midbar .pill{display:flex;align-items:baseline;gap:3px;font-weight:800;font-size:17px;color:var(--ink)}
+.midbar .pill small{font-size:10px;font-weight:700;color:var(--muted)}
+.midbar .pill.urgent{color:var(--red)}
+.midbar button{min-height:30px;padding:2px 10px;border-radius:9px;border:1px solid #a7b09b;background:#f3f5ed;color:var(--green-dark);font-size:11px;font-weight:700}
+.finished .midbar .mid-hint{display:none}
+body.finished{overflow:auto!important}.finished .wrap{height:auto!important;min-height:100dvh}   /* クリアのあとは、下へ ずらして 答えを 見られる */
+}
 </style>
 </head>
 <body>
@@ -59,9 +80,9 @@
 <header class="masthead"><div><p class="eyebrow">カギしっぽバスケ部 ・ あそびのじかん</p><h1>まちがいさがし</h1><p class="small-note">ドラとタマが、宇宙へ。ふたつの絵をよく見て、ちがうところを見つけよう。<br>ぜんぶ見つけたら、きれいな絵を保存できるよ。</p></div><div class="flower" aria-hidden="true">✦</div></header>
 <section class="selection" aria-label="問題を選ぶ"><label for="problemSelect">きょうの問題</label><select id="problemSelect"></select></section>
 <div class="scorebar"><div class="meter" id="clockBox"><small>のこりじかん</small><strong id="clock">60<em>秒</em></strong></div><div class="meter"><small>みつけた！</small><strong id="foundCount">0<em>/ 5</em></strong></div><button class="sound" id="soundToggle" type="button" aria-pressed="true">音：オン</button></div>
-<section class="intro" id="intro"><div><h2 id="introTitle">ちがいを見つけよう</h2><p id="introTime"></p><p>どちらの絵をタップしても大丈夫。<br>まちがえても、点数はへらないよ。</p><label class="time-choice"><input id="untimedChoice" type="checkbox">時間を気にせず遊ぶ</label></div><button type="button" class="primary" id="startButton" disabled>絵をよみこみ中…</button></section>
+<section class="intro" id="intro"><div><h2 id="introTitle">ちがいを見つけよう</h2><p id="introTime"></p><p>どちらの絵をタップしても大丈夫。<br>まちがえても、点数はへらないよ。</p><p class="inapp-note" id="inappNote" hidden>アプリの中だと絵が小さくなります。右上の「…」から「ブラウザで開く」にすると、大きく遊べるよ。</p><label class="time-choice"><input id="untimedChoice" type="checkbox">時間を気にせず遊ぶ</label></div><button type="button" class="primary" id="startButton" disabled>絵をよみこみ中…</button></section>
 <section class="outcome" id="outcome" hidden aria-live="polite"><div class="result-art" id="resultArt" aria-hidden="true"><img id="resultImg" alt="" src="clear_dora.png"></div><div class="result-copy"><h2 id="resultTitle"></h2><p id="resultText"></p></div><div class="result-actions"><a class="secondary save-art" id="saveArt" href="uchu1-original.png" download="kagishippo_uchu.png">きれいな絵を保存</a><a class="secondary save-art" id="saveWall" href="uchu1-wallpaper.png" download="kagishippo_uchu_machiuke.png">待ち受け用を保存</a><button type="button" class="primary" id="retryButton">もう一回</button><button type="button" class="secondary" id="resultMenuButton">問題をえらぶ</button></div></section>
-<section class="pictures" aria-label="ふたつの絵を見くらべる"><div class="picture-card"><span class="picture-label">もとの絵</span><button class="scene inactive" type="button" id="originalBoard" aria-label="もとの絵。ちがうところをタップ"><img id="originalImage" alt="もとの絵" draggable="false"><svg id="originalMarks" viewBox="0 0 1080 1080" aria-hidden="true"></svg><svg id="originalFx" class="fx" viewBox="0 0 1080 1080" aria-hidden="true"></svg></button></div><div class="picture-card"><span class="picture-label">ちがう絵</span><button class="scene inactive" type="button" id="differentBoard" aria-label="ちがう絵。ちがうところをタップ"><img id="differentImage" alt="ちがう絵" draggable="false"><svg id="differentMarks" viewBox="0 0 1080 1080" aria-hidden="true"></svg><svg id="differentFx" class="fx" viewBox="0 0 1080 1080" aria-hidden="true"></svg></button></div></section>
+<div class="midbar" id="midbar" aria-hidden="true"><button type="button" id="midMenu">≡ 問題</button><span class="pill" id="midClock"><small>のこり</small><b>120</b><small>秒</small></span><span class="pill" id="midCount"><small>みつけた</small><b>0</b><small>/ 5</small></span><button type="button" class="mid-hint" id="midHint">ヒント</button><button type="button" id="midSound">音</button></div><section class="pictures" aria-label="ふたつの絵を見くらべる"><div class="picture-card"><span class="picture-label">もとの絵</span><button class="scene inactive" type="button" id="originalBoard" aria-label="もとの絵。ちがうところをタップ"><img id="originalImage" alt="もとの絵" draggable="false"><svg id="originalMarks" viewBox="0 0 1080 1080" aria-hidden="true"></svg><svg id="originalFx" class="fx" viewBox="0 0 1080 1080" aria-hidden="true"></svg></button></div><div class="picture-card"><span class="picture-label">ちがう絵</span><button class="scene inactive" type="button" id="differentBoard" aria-label="ちがう絵。ちがうところをタップ"><img id="differentImage" alt="ちがう絵" draggable="false"><svg id="differentMarks" viewBox="0 0 1080 1080" aria-hidden="true"></svg><svg id="differentFx" class="fx" viewBox="0 0 1080 1080" aria-hidden="true"></svg></button></div></section>
 <div class="helpbar"><button class="secondary" id="menuButton" type="button">問題をえらぶ</button><p>あと少し、どこだろう？<br>ヒントは1回だけ使えるよ。</p><button class="secondary" id="hintButton" type="button" disabled>ヒントを見る</button></div>
 <p class="status" id="status" role="status" aria-live="polite">スタートを押すと、時計がうごき出すよ。</p>
 <details id="problemList"><summary>ほかの問題で遊ぶ <span id="problemTotal"></span></summary><div class="problem-grid" id="problemGrid"></div></details>
@@ -241,8 +262,9 @@ const ZoomRules=(()=>{
     var b=document.body; if(!b.classList.contains('game-active')) return;
     var pics=document.querySelector('.pictures'); var cards=document.querySelectorAll('.picture-card'); if(!pics||!cards.length) return;
     var W=document.documentElement.clientWidth, H=window.innerHeight;
-    var bar=(document.querySelector('.scorebar')||{}).offsetHeight||52;
-    var help=b.classList.contains('finished') ? 0 : ((document.querySelector('.helpbar')||{}).offsetHeight||56);
+    var phone=document.documentElement.clientWidth<=700;
+    var bar=phone?34:((document.querySelector('.scorebar')||{}).offsetHeight||52);
+    var help=(phone||b.classList.contains('finished')) ? 0 : ((document.querySelector('.helpbar')||{}).offsetHeight||56);
     var out=document.querySelector('.outcome'); var outH=(out&&!out.hidden)?out.offsetHeight+8:0;
     var small=W<=700, free=H-bar-help-outH-(small?16:16+8*3+34); /* スマホは 名札を 絵の 上に 重ねたので ゆとり不要 */
     var side=Math.min((W-(small?8:34))/2, free+(small?0:17));
@@ -254,6 +276,29 @@ const ZoomRules=(()=>{
   window.addEventListener('resize',fit);
   new MutationObserver(fit).observe(document.body,{attributes:true,attributeFilter:['class'],subtree:true,childList:true});
   setTimeout(fit,0);
+})();
+</script>
+
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  if(/Barcelona|Instagram|FBAN|FBAV|Line\//i.test(navigator.userAgent))$('inappNote').hidden=false;
+  // まん中の 帯：上の バーの 数字と ボタンを そのまま 写す（押したら 本物の ボタンを 押す）
+  $('midMenu').addEventListener('click',function(){$('menuButton').click()});
+  $('midHint').addEventListener('click',function(){$('hintButton').click()});
+  $('midSound').addEventListener('click',function(){$('soundToggle').click()});
+  function put(el,t){if(el.textContent!==t)el.textContent=t}   // 同じなら 書かない（MutationObserver が 回りつづけないように）
+  function sync(){
+    var c=$('clock').firstChild,f=$('foundCount');
+    put($('midClock').querySelector('b'),c?c.textContent:'');
+    $('midClock').classList.toggle('urgent',$('clockBox').classList.contains('urgent'));
+    put($('midCount').querySelector('b'),f.firstChild?f.firstChild.textContent:'');
+    var t=f.querySelector('em');put($('midCount').lastChild,t?t.textContent:'');
+    if($('midHint').disabled!==$('hintButton').disabled)$('midHint').disabled=$('hintButton').disabled;put($('midHint'),/使った/.test($('hintButton').textContent)?'ヒント済':'ヒント');
+    put($('midSound'),/オン/.test($('soundToggle').textContent)?'音 ON':'音 OFF');
+  }
+  new MutationObserver(sync).observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['disabled','class']});
+  sync();
 })();
 </script>
 </body>
