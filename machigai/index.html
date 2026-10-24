@@ -83,7 +83,7 @@ body.finished{overflow:auto!important}.finished .wrap{height:auto!important;min-
 <section class="selection" aria-label="問題を選ぶ"><label for="problemSelect">きょうの問題</label><select id="problemSelect"></select></section>
 <div class="scorebar"><div class="meter" id="clockBox"><small>のこりじかん</small><strong id="clock">60<em>秒</em></strong></div><div class="meter"><small>みつけた！</small><strong id="foundCount">0<em>/ 5</em></strong></div><button class="sound" id="soundToggle" type="button" aria-pressed="true">音：オン</button></div>
 <section class="intro" id="intro"><div><h2 id="introTitle">ちがいを見つけよう</h2><p id="introTime"></p><p>どちらの絵をタップしても大丈夫。<br>まちがえても、点数はへらないよ。<br>二本指で、絵を大きくできるよ。</p><p class="inapp-note" id="inappNote" hidden>アプリの中だと絵が小さくなります。右上の「…」から「ブラウザで開く」にすると、大きく遊べるよ。</p><label class="time-choice"><input id="untimedChoice" type="checkbox">時間を気にせず遊ぶ</label></div><button type="button" class="primary" id="startButton" disabled>絵をよみこみ中…</button></section>
-<section class="outcome" id="outcome" hidden aria-live="polite"><div class="result-art" id="resultArt" aria-hidden="true"><img id="resultImg" alt="" src="clear_dora.png"></div><div class="result-copy"><h2 id="resultTitle"></h2><p id="resultText"></p></div><div class="result-actions"><a class="secondary save-art" id="saveArt" href="uchu1-original.png" download="kagishippo_uchu.png">きれいな絵を保存</a><a class="secondary save-art" id="saveWall" href="uchu1-wallpaper.png" download="kagishippo_uchu_machiuke.png">待ち受け用を保存</a><button type="button" class="primary" id="hardButton" hidden>むずかしいモードへ（あと5か所）</button><button type="button" class="primary" id="retryButton">もう一回</button><button type="button" class="secondary" id="resultMenuButton">問題をえらぶ</button></div></section>
+<section class="outcome" id="outcome" hidden aria-live="polite"><div class="result-art" id="resultArt" aria-hidden="true"><img id="resultImg" alt="" src="clear_dora.png"></div><div class="result-copy"><h2 id="resultTitle"></h2><p id="resultText"></p></div><div class="result-actions"><a class="secondary save-art" id="saveArt" href="uchu1-original.png" download="kagishippo_uchu.png">きれいな絵を保存</a><a class="secondary save-art" id="saveWall" href="uchu1-wallpaper.png" download="kagishippo_uchu_machiuke.png">待ち受け用を保存</a><button type="button" class="primary" id="hardButton" hidden>むずかしいモードに挑戦（5か所）</button><button type="button" class="primary" id="retryButton">もう一回</button><button type="button" class="secondary" id="resultMenuButton">問題をえらぶ</button></div></section>
 <div class="midbar" id="midbar" aria-hidden="true"><button type="button" id="midMenu">≡ 問題</button><span class="pill" id="midClock"><small>のこり</small><b>120</b><small>秒</small></span><span class="pill" id="midCount"><small>みつけた</small><b>0</b><small>/ 5</small></span><button type="button" class="mid-hint" id="midHint">ヒント</button><button type="button" id="midSound">音</button></div><section class="pictures" aria-label="ふたつの絵を見くらべる"><div class="picture-card"><span class="picture-label">もとの絵</span><button class="scene inactive" type="button" id="originalBoard" aria-label="もとの絵。ちがうところをタップ"><img id="originalImage" alt="もとの絵" draggable="false"><svg id="originalMarks" viewBox="0 0 1440 1080" aria-hidden="true"></svg><svg id="originalFx" class="fx" viewBox="0 0 1440 1080" aria-hidden="true"></svg></button></div><div class="picture-card"><span class="picture-label">ちがう絵</span><button class="scene inactive" type="button" id="differentBoard" aria-label="ちがう絵。ちがうところをタップ"><img id="differentImage" alt="ちがう絵" draggable="false"><svg id="differentMarks" viewBox="0 0 1440 1080" aria-hidden="true"></svg><svg id="differentFx" class="fx" viewBox="0 0 1440 1080" aria-hidden="true"></svg></button></div></section>
 <div class="helpbar"><button class="secondary" id="menuButton" type="button">問題をえらぶ</button><p>あと少し、どこだろう？<br>ヒントは1回だけ使えるよ。</p><button class="secondary" id="hintButton" type="button" disabled>ヒントを見る</button></div>
 <p class="status" id="status" role="status" aria-live="polite">スタートを押すと、時計がうごき出すよ。</p>
@@ -153,38 +153,38 @@ body.finished{overflow:auto!important}.finished .wrap{height:auto!important;min-
         "answers": [
           {
             "id": "h1",
-            "x": 848.0,
-            "y": 212.0,
-            "r": 44,
-            "kind": "コウモリが、1匹ふえる"
+            "x": 140.0,
+            "y": 120.0,
+            "r": 30,
+            "kind": "左上のきらきら星が、ない"
           },
           {
             "id": "h2",
-            "x": 1078.0,
-            "y": 712.0,
-            "r": 70,
-            "kind": "家に、えんとつ"
+            "x": 380.0,
+            "y": 812.0,
+            "r": 40,
+            "kind": "手前のかぼちゃのへたが、逆向き"
           },
           {
             "id": "h3",
-            "x": 1344.0,
-            "y": 502.0,
-            "r": 44,
-            "kind": "ほうきの柄に、リボン"
+            "x": 524.0,
+            "y": 640.0,
+            "r": 70,
+            "kind": "ほうきの穂の線が、2本"
           },
           {
             "id": "h4",
-            "x": 774.0,
-            "y": 802.0,
-            "r": 42,
-            "kind": "丘に、黒猫のかげ"
+            "x": 760.0,
+            "y": 900.0,
+            "r": 30,
+            "kind": "道のまん中の灯りが、ない"
           },
           {
             "id": "h5",
-            "x": 1340.0,
-            "y": 836.0,
-            "r": 30,
-            "kind": "奥の家の口が、への字"
+            "x": 1000.0,
+            "y": 900.0,
+            "r": 60,
+            "kind": "おばけ猫の窓の横の桟が、ない"
           }
         ]
       }
@@ -255,31 +255,31 @@ body.finished{overflow:auto!important}.finished .wrap{height:auto!important;min-
           },
           {
             "id": "h2",
-            "x": 582.0,
-            "y": 974.0,
-            "r": 50,
-            "kind": "地球に、小さな島"
+            "x": 474.0,
+            "y": 996.0,
+            "r": 100,
+            "kind": "地球の雲の線が、みじかい"
           },
           {
             "id": "h3",
-            "x": 914.0,
-            "y": 684.0,
-            "r": 38,
-            "kind": "計器の画面の波が、ハートに"
+            "x": 464.0,
+            "y": 470.0,
+            "r": 30,
+            "kind": "左の桃色の灯りが、ない"
           },
           {
             "id": "h4",
-            "x": 1086.0,
-            "y": 150.0,
-            "r": 100,
-            "kind": "土星の輪のかたむきが、逆"
+            "x": 790.0,
+            "y": 680.0,
+            "r": 46,
+            "kind": "黄と桃のランプが、入れかわる"
           },
           {
             "id": "h5",
-            "x": 494.0,
-            "y": 636.0,
-            "r": 42,
-            "kind": "船の肉球のしるしが、魚に"
+            "x": 944.0,
+            "y": 384.0,
+            "r": 100,
+            "kind": "窓の右上のつやが、ない"
           }
         ]
       }
@@ -380,7 +380,7 @@ const ZoomRules=(()=>{
  function drawMarks(){for(const id of ['originalMarks','differentMarks']){const svg=$(id);svg.replaceChildren();if(!current||!state)continue;for(const a of current.answers){if(state.found.includes(a.id))circle(svg,a,'found-mark');else if(state.status==='timeout')circle(svg,a,'reveal-mark');else if(state.hintId===a.id&&state.status==='running')circle(svg,{...a,r:a.r*1.35},'hint-mark');}if(wrongMark&&wrongMark.svgId===id&&state.status==='running'){const node=document.createElementNS(NS,'text');node.setAttribute('x',wrongMark.x);node.setAttribute('y',wrongMark.y);node.setAttribute('text-anchor','middle');node.setAttribute('dominant-baseline','middle');node.setAttribute('class','wrong-mark');node.textContent='×';svg.appendChild(node);}}}
  function clearWords(p,sec){if(p.difficulty==='hard')return ['clear_dora.png','ドラ「…むずかしいのを、ぜんぶか。まいった」'];if(sec<=p.timeLimit/2)return ['clear_dora.png','ドラ「…はやい。スカウトしたい」'];return ['clear_tama.png','タマ「‥すごーい！ ぼくは寝てて、1つも見てない」'];}
  function render(){if(!current||!state)return;document.body.classList.toggle('game-active',state.status!=='ready');document.body.classList.toggle('playing',state.status==='running');document.body.classList.toggle('finished',['clear','timeout'].includes(state.status));const remaining=GameRules.remaining(current,state,now());ui.clock.replaceChildren(document.createTextNode(state.untimed?'∞':String(Math.ceil(remaining))));const seconds=document.createElement('em');seconds.textContent='秒';ui.clock.appendChild(seconds);ui.clockBox.classList.toggle('urgent',!state.untimed&&(state.status==='running'&&remaining<=10||state.status==='timeout'));ui.count.replaceChildren(document.createTextNode(String(state.found.length)));const total=document.createElement('em');total.textContent='/ '+current.answers.length;ui.count.appendChild(total);ui.intro.hidden=state.status!=='ready';ui.outcome.hidden=!['clear','timeout'].includes(state.status);ui.outcome.classList.toggle('timeout',state.status==='timeout');ui.hint.disabled=state.status!=='running'||state.hintUsed;ui.hint.textContent=state.hintUsed?'ヒントを使ったよ':'ヒントを見る';ui.start.disabled=!imagesReady||state.status!=='ready';ui.start.textContent=imagesReady?'スタート':'絵をよみこみ中…';$('introTitle').textContent='ちがいを '+current.answers.length+'つ、みつけよう';$('introTime').textContent=levelNames[current.difficulty]+' / '+(ui.untimed.checked?'時間制限なし':current.timeLimit+'秒');for(const id of ['originalBoard','differentBoard'])$(id).classList.toggle('inactive',state.status!=='running');
-  if(state.status==='clear'){const sec=(state.endedAt-state.startedAt)/1000,c=clearWords(current,sec);$('resultTitle').textContent='ぜんぶ、みつけた！ '+sec.toFixed(1)+'秒';$('resultText').textContent=c[1];$('resultImg').src=c[0];$('resultArt').hidden=false;}else if(state.status==='timeout'){$('resultTitle').textContent='じかんになったよ';$('resultText').textContent='光っているところが、のこりの答えだよ。';$('resultImg').src='timeout_tama.png';$('resultArt').hidden=false;}const hb=$('hardButton');if(hb){const ok=state.status==='clear'&&!current.isHard&&current.hard;hb.hidden=!ok;if(ok)hb.textContent='むずかしいモードへ（あと'+current.hard.answers.length+'か所）';$('retryButton').className=ok?'secondary':'primary';}drawMarks();}
+  if(state.status==='clear'){const sec=(state.endedAt-state.startedAt)/1000,c=clearWords(current,sec);$('resultTitle').textContent='ぜんぶ、みつけた！ '+sec.toFixed(1)+'秒';$('resultText').textContent=c[1];$('resultImg').src=c[0];$('resultArt').hidden=false;}else if(state.status==='timeout'){$('resultTitle').textContent='じかんになったよ';$('resultText').textContent='光っているところが、のこりの答えだよ。';$('resultImg').src='timeout_tama.png';$('resultArt').hidden=false;}const hb=$('hardButton');if(hb){const ok=state.status==='clear'&&!current.isHard&&current.hard;hb.hidden=!ok;if(ok)hb.textContent='むずかしいモードに挑戦（'+current.hard.answers.length+'か所）';$('retryButton').className=ok?'secondary':'primary';}drawMarks();}
  function tick(){if(!state||state.status!=='running')return;const previous=state.status;state=GameRules.advance(current,state,now());if(state.status==='timeout'){stopClock();stopSounds();clearEffects();setStatus('じかん切れ。光っているところを見てみよう。');render();return;}const left=Math.ceil(GameRules.remaining(current,state,now()));if(left<=10&&left>0&&left!==lastBeat){lastBeat=left;heartbeat();}render();}
  function begin(prefound){if(!imagesReady||!current)return;cleanup();state=GameRules.begin(GameRules.createState(current,ui.untimed.checked),now());if(Array.isArray(prefound))state={...state,found:[...prefound]};audioReady();setStatus('ちがうところを、どちらかの絵でタップしてね。');interval=setInterval(tick,100);render();}
  function boardTap(event,imageId){if(!current||!state||event.detail===0||Date.now()<suppressTapUntil)return;const board=$(imageId==='originalImage'?'originalBoard':'differentBoard');const screenPoint=GameRules.pointAt(event.clientX,event.clientY,board.getBoundingClientRect());const point=screenPoint&&ZoomRules.point(screenPoint,zoom.scale,zoom.panX,zoom.panY);if(!point)return;const result=GameRules.tap(current,state,point.x,point.y,now()),previous=state.status;state=result.state;if(result.type==='found'){stopSounds();joy(current.answers.find(a=>a.id===state.found[state.found.length-1]),state.found.length,current.answers.length,state.status==='clear');wrongMark=null;if(state.status==='clear'){stopClock();clearEffects();setStatus('ぜんぶ見つけたね！');}else setStatus('みつけた！ あと'+(current.answers.length-state.found.length)+'つ。');}
@@ -389,7 +389,7 @@ const ZoomRules=(()=>{
  function choose(id,derived,onReady){const p=derived||problems.find(p=>p.id===id);if(!p)return;cleanup();const version=++loadVersion;current=p;state=GameRules.createState(p,ui.untimed.checked);imagesReady=false;resetZoom();ui.select.value=p.baseId||p.id;for(const b of ui.grid.querySelectorAll('button'))b.setAttribute('aria-current',String(b.dataset.id===(p.baseId||p.id)));setStatus('スタートを押すと、時計がうごき出すよ。');let loaded=0;
   for(const [imageId,name] of [['originalImage',p.original],['differentImage',p.different]]){const image=$(imageId);image.onload=()=>{if(version!==loadVersion)return;if(image.naturalWidth!==IW||image.naturalHeight!==IH){setStatus('絵の大きさが合っていないので、この問題はお休みです。',true);return;}loaded++;if(loaded===2){imagesReady=true;render();if(onReady)onReady();}};image.onerror=()=>{if(version!==loadVersion)return;imagesReady=false;ui.start.disabled=true;ui.start.textContent='絵が見つかりません';setStatus('絵が見つかりません。ページと同じ場所に絵があるか、確かめてね。',true);};image.src=encodeURIComponent(name);}render();}
  function rebuild(){ui.select.replaceChildren();ui.grid.replaceChildren();for(const p of problems){const option=document.createElement('option');option.value=p.id;option.textContent=p.title+' · '+levelNames[p.difficulty];ui.select.appendChild(option);const button=document.createElement('button');button.type='button';button.className='problem-button';button.dataset.id=p.id;const title=document.createElement('span');title.textContent=p.title;const note=document.createElement('small');note.textContent=levelNames[p.difficulty]+' / '+p.answers.length+'つ / '+p.timeLimit+'秒';button.append(title,note);button.addEventListener('click',()=>{choose(p.id);$('problemList').open=false;ui.start.focus({preventScroll:true});});ui.grid.appendChild(button);}$('problemTotal').textContent='（'+problems.length+'問）';}
- function startHard(){const base=problems.find(p=>p.id===(current&&(current.baseId||current.id)));if(!base||!base.hard)return;const derived={...base,id:base.id+'-hard',baseId:base.id,isHard:true,difficulty:'hard',timeLimit:GameRules.LIMITS.hard,different:base.hard.different,answerImage:base.hard.answerImage,answers:[...base.answers,...base.hard.answers]};const pre=base.answers.map(a=>a.id);choose(null,derived,()=>{begin(pre);setStatus('むずかしいモード：あと'+base.hard.answers.length+'つ。小さいちがいもあるよ。');});}
+ function startHard(){const base=problems.find(p=>p.id===(current&&(current.baseId||current.id)));if(!base||!base.hard)return;/* 10/24 夜 遊んだ人2人「簡単すぎる・ふつうとの差が分からない」→ むずかしいは 0/5 から始まる 別の 問題（元の絵と、むずかしい5か所だけ ちがう絵） */const derived={...base,id:base.id+'-hard',baseId:base.id,isHard:true,difficulty:'hard',timeLimit:GameRules.LIMITS.hard,different:base.hard.different,answerImage:base.hard.answerImage,answers:[...base.hard.answers]};choose(null,derived,()=>{begin();setStatus('むずかしいモード：ちがいは '+base.hard.answers.length+'つ。さっきとは べつの ところだよ。');});}
  function menu(){if(!current)return;/* 10/24 マムさんの331：とちゅうで押すと、確かめずに0/5へもどっていた */if(state&&state.status==='running'&&state.found.length>0&&!confirm('問題をえらびなおすと、見つけた数は0にもどります。えらびなおしますか？'))return;cleanup();state=GameRules.createState(current,ui.untimed.checked);resetZoom();setStatus('好きな問題を選んで、スタートしてね。');render();ui.select.focus({preventScroll:true});}$('menuButton').addEventListener('click',menu);$('resultMenuButton').addEventListener('click',menu);
  ui.untimed.addEventListener('change',()=>{if(state&&state.status==='ready'){state=GameRules.createState(current,ui.untimed.checked);render();}});ui.start.addEventListener('click',()=>{if(state&&state.status==='ready')begin();});$('retryButton').addEventListener('click',()=>{if(current&&current.isHard)startHard();else begin();});$('hardButton').addEventListener('click',startHard);ui.select.addEventListener('change',()=>choose(ui.select.value));ui.hint.addEventListener('click',()=>{if(!current||!state)return;const old=state;state=GameRules.hint(current,state,now());if(state.hintUsed&&!old.hintUsed)setStatus('うっすら光っているあたりを、よく見てね。');if(state.status==='timeout'){stopClock();stopSounds();setStatus('じかん切れ。光っているところを見てみよう。');}render();});ui.sound.addEventListener('click',()=>{soundOn=!soundOn;ui.sound.textContent='音：'+(soundOn?'オン':'オフ');ui.sound.setAttribute('aria-pressed',String(soundOn));if(soundOn)audioReady();else stopSounds();});$('originalBoard').addEventListener('click',e=>boardTap(e,'originalImage'));$('differentBoard').addEventListener('click',e=>boardTap(e,'differentImage'));for(const id of ['originalBoard','differentBoard'])attachZoom($(id));window.addEventListener('resize',applyZoom);
  $('problemFiles').addEventListener('change',async event=>{const version=loadVersion;try{const files=[...event.target.files];if(!files.length)return;const additions=[];for(const file of files){if(file.size>2_000_000)throw new Error('問題ファイルが大きすぎます。');additions.push(...GameRules.unpack(JSON.parse(await file.text())));}const map=new Map(problems.map(p=>[p.id,p]));for(const p of additions)map.set(p.id,p);problems=[...map.values()];rebuild();choose(additions[0].id);$('loadMessage').textContent=additions.length+'問を追加したよ。';}catch(error){$('loadMessage').textContent=error.message||'問題が読み取れませんでした。';}});
