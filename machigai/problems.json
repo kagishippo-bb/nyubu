@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "problems": [
+    {
+      "version": 1,
+      "id": "uchu1",
+      "title": "宇宙へ、ドラとタマ",
+      "width": 1080,
+      "height": 1080,
+      "difficulty": "normal",
+      "timeLimit": 120,
+      "original": "uchu1-original.png",
+      "different": "uchu1-different.png",
+      "answerImage": "uchu1-answer.png",
+      "answers": [
+        {
+          "id": "1",
+          "x": 242.0,
+          "y": 162.0,
+          "r": 114,
+          "kind": "星座が、魚の骨に",
+          "itemId": "d1"
+        },
+        {
+          "id": "2",
+          "x": 538.0,
+          "y": 101.0,
+          "r": 88,
+          "kind": "ほうき星のしっぽが、猫のしっぽに",
+          "itemId": "d2"
+        },
+        {
+          "id": "3",
+          "x": 656.0,
+          "y": 312.0,
+          "r": 54,
+          "kind": "ヘルメットが、金魚鉢に",
+          "itemId": "d3"
+        },
+        {
+          "id": "4",
+          "x": 991.0,
+          "y": 456.0,
+          "r": 62,
+          "kind": "毛玉星人が、顔を洗っている",
+          "itemId": "d4"
+        },
+        {
+          "id": "5",
+          "x": 560.0,
+          "y": 982.0,
+          "r": 54,
+          "kind": "小さな月が、鈴に",
+          "itemId": "d5"
+        }
+      ]
+    }
+  ]
+}

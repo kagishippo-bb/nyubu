@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' file: data:; connect-src 'none'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta property="og:title" content="カギしっぽの まちがいさがし ・ 宇宙へ"><meta property="og:description" content="ドラとタマが、宇宙へ。ちがいは5つ。ぜんぶ見つけたら、きれいな絵を保存できます。"><meta property="og:image" content="https://kagishippo-bb.github.io/nyubu/machigai/og.png"><meta property="og:url" content="https://kagishippo-bb.github.io/nyubu/machigai/"><meta name="twitter:card" content="summary_large_image">
+<title>カギしっぽの まちがいさがし ・ 宇宙へ</title>
+<style>
+:root{--paper:#fff9ef;--ink:#4b3e34;--muted:#807263;--green:#72916a;--green-dark:#44623e;--gold:#f3d38b;--line:#dfd2bf;--red:#ce514a;--white:#fffdf8;font-family:"Hiragino Maru Gothic ProN","Hiragino Maru Gothic Pro","Yu Gothic",sans-serif;color:var(--ink);background:var(--paper);font-synthesis:none}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 8% 8%,#f1e8d5 0 3px,transparent 4px) 0 0/33px 33px,var(--paper)}button,select,input{font:inherit}button,select,summary{touch-action:manipulation}button{cursor:pointer}button:disabled{cursor:default;opacity:.47}button:focus-visible,select:focus-visible,summary:focus-visible,input:focus-visible{outline:4px solid #bb8529;outline-offset:4px}.wrap{max-width:1140px;margin:auto;padding:30px 26px 36px}.masthead{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:0 0 24px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.13em;margin:0 0 8px;color:var(--green-dark)}h1{font-size:clamp(24px,4vw,38px);line-height:1.28;letter-spacing:.025em;margin:0;font-weight:850}.flower{width:68px;height:68px;flex:none;border:2px solid var(--ink);border-radius:50% 43% 50% 45%;background:var(--gold);display:grid;place-items:center;transform:rotate(9deg);font-size:31px}.small-note{margin:9px 0 0;font-size:14px;color:var(--muted);line-height:1.8}.selection{display:flex;align-items:center;gap:14px;background:#fffdf8;border:1px solid var(--line);padding:14px 18px;border-radius:20px;margin-bottom:15px}.selection label{font-size:13px;font-weight:bold;white-space:nowrap}select{color:var(--ink);background:var(--white);border:1px solid var(--line);border-radius:12px;min-height:48px;width:100%;padding:10px 38px 10px 12px;font-weight:700;font-size:15px}.scorebar{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:stretch;margin:16px 0}.meter{border:2px solid var(--ink);background:var(--white);border-radius:18px;padding:11px 18px;display:flex;gap:10px;align-items:center;justify-content:space-between;min-height:67px}.meter small{font-size:13px;color:var(--muted);white-space:nowrap}.meter strong{font-size:27px;white-space:nowrap;font-variant-numeric:tabular-nums}.meter strong em{font-size:15px;font-style:normal;margin-left:4px}.meter.urgent{background:#fff0ec;border-color:var(--red);color:var(--red)}.meter.urgent small{color:var(--red)}.sound{min-height:58px;padding:10px 15px;border:1px solid var(--line);border-radius:18px;background:var(--white);color:var(--ink);font-size:14px;white-space:nowrap}.sound[aria-pressed=true]{background:#e8efe1;border-color:var(--green)}.intro,.outcome{background:#efeeda;border:1px solid #d5dcc7;border-radius:20px;padding:20px 22px;margin:15px 0 20px;display:flex;gap:22px;align-items:center;justify-content:space-between}.intro h2,.outcome h2{font-size:22px;line-height:1.5;margin:0 0 4px}.intro p,.outcome p{font-size:14px;line-height:1.8;margin:0}.primary{min-height:54px;padding:14px 27px;background:var(--green-dark);border:2px solid var(--green-dark);border-radius:16px;color:#fffdf4;font-size:17px;font-weight:800;box-shadow:0 3px 0 #2d4627;white-space:nowrap}.primary:active:not(:disabled){transform:translateY(2px);box-shadow:0 1px 0 #2d4627}.outcome{background:#fff2d6;border-color:#ead5a5}.outcome.timeout{background:#fff0e7}.outcome[hidden],.intro[hidden],[hidden]{display:none!important}.result-art{width:96px;height:96px;flex:none}.result-art img{width:100%;height:100%;display:block}.result-copy{flex:1}.pictures{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}.picture-card{min-width:0}.picture-label{display:inline-block;border:1px solid var(--ink);border-bottom:0;border-radius:12px 12px 0 0;padding:7px 16px;background:#e9efdf;font-size:13px;font-weight:800;margin-left:12px}.picture-card:nth-child(2) .picture-label{background:#f8e7bc}.scene{display:block;width:100%;position:relative;border:2px solid var(--ink);padding:0;border-radius:18px;background:#fff;overflow:hidden;line-height:0;box-shadow:0 5px 0 #e6dac6;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}.scene img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:contain;pointer-events:none}.scene svg{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;pointer-events:none}.scene.inactive{cursor:default}.found-mark{fill:none;stroke:var(--red);stroke-width:8;filter:drop-shadow(0 1px 1px #fff)}.hint-mark{fill:#f7dc76;fill-opacity:.24;stroke:#caa131;stroke-width:5;stroke-dasharray:11 12;filter:drop-shadow(0 0 12px #e9cb50)}.reveal-mark{fill:#f4a58b;fill-opacity:.2;stroke:var(--red);stroke-width:7;animation:glow 1.1s ease-in-out infinite alternate}.wrong-mark{font-family:sans-serif;font-size:45px;font-weight:bold;fill:#776456;stroke:#fff8ed;stroke-width:2;paint-order:stroke}@keyframes glow{from{opacity:.45}to{opacity:1}}.helpbar{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:24px 0 18px;padding:14px 17px;background:var(--white);border:1px solid var(--line);border-radius:18px}.helpbar p{font-size:13px;line-height:1.7;color:var(--muted);margin:0}.secondary{border:1px solid #a7b09b;background:#f3f5ed;min-height:48px;padding:10px 20px;border-radius:13px;color:var(--green-dark);font-size:14px;font-weight:700;white-space:nowrap}.status{min-height:27px;font-size:14px;text-align:center;line-height:1.8;margin:0 0 19px;color:var(--green-dark)}details{border-top:1px solid var(--line);padding:16px 0}summary{min-height:32px;cursor:pointer;font-size:14px;font-weight:750}.problem-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:16px 0 4px}.problem-button{display:flex;flex-direction:column;gap:7px;text-align:left;padding:15px 16px;border:1px solid var(--line);border-radius:14px;background:var(--white);color:var(--ink);min-height:76px;font-size:14px}.problem-button small{color:var(--muted);font-size:12px}.problem-button[aria-current=true]{background:#eaf0e2;border-color:var(--green)}.local-tools{color:var(--muted);font-size:12px;line-height:1.8}.local-tools input{max-width:100%;margin:8px 0 3px}.footer{font-size:12px;color:var(--muted);text-align:center;padding-top:22px}.error{color:var(--red)}@media(max-width:700px){.wrap{padding:22px 15px 28px}.masthead{margin-bottom:20px;gap:12px}.flower{width:49px;height:49px;font-size:24px}.small-note{font-size:12px}.selection{padding:11px 12px;gap:9px}.selection label{font-size:12px}.scorebar{gap:8px;grid-template-columns:1fr 1fr}.meter{padding:10px 12px;border-radius:15px;min-height:61px}.meter strong{font-size:24px}.meter small{font-size:11px}.sound{grid-column:1/-1;justify-self:end;min-height:42px;padding:7px 15px;border-radius:12px}.pictures{grid-template-columns:1fr;gap:20px}.intro,.outcome{padding:17px 16px;gap:14px;flex-wrap:wrap}.intro h2,.outcome h2{font-size:20px}.intro p,.outcome p{font-size:13px}.intro>.primary{width:100%}.outcome>.primary{width:100%}.result-art{width:76px;height:76px}.helpbar{position:sticky;bottom:10px;z-index:3;box-shadow:0 4px 17px #59462e14;padding:10px 12px;margin:22px 0 14px}.helpbar p{font-size:11px}.secondary{padding:10px 15px;font-size:13px}.problem-grid{grid-template-columns:1fr 1fr;gap:9px}.problem-button{padding:13px 12px;font-size:13px}.status{font-size:13px}.picture-label{font-size:12px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;scroll-behavior:auto!important}}
+
+/* One-screen play area for embedded browsers; the menu uses the native selector. */
+#problemList{display:none}body:not(.game-active) .pictures,body:not(.game-active) .helpbar,body:not(.game-active) .scorebar{display:none}#introTime{font-size:13px;color:var(--green-dark);font-weight:700;margin:5px 0}.result-actions{display:flex;gap:8px;align-items:center}.result-actions .secondary{min-height:52px}#menuButton{display:none}.game-active #menuButton{display:block}.game-active{overflow:hidden}.game-active .wrap{height:100dvh;max-width:1200px;padding:8px 10px;padding-top:max(8px,env(safe-area-inset-top,0px));padding-bottom:max(8px,env(safe-area-inset-bottom,0px));padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:8px}.game-active .masthead,.game-active .selection,.game-active .intro,.game-active details,.game-active footer{display:none}.game-active .scorebar{display:grid;grid-template-columns:1fr 1fr auto;margin:0;gap:8px;flex:none}.game-active .meter{min-height:52px;padding:7px 12px;border-radius:13px}.game-active .meter small{font-size:11px}.game-active .meter strong{font-size:23px}.game-active .sound{grid-column:auto;min-height:48px;padding:6px 12px;border-radius:12px;justify-self:stretch;font-size:12px}.game-active .pictures{display:flex;flex:1;min-height:0;align-items:center;justify-content:center;flex-direction:column;gap:8px}.game-active .picture-card{width:min(100%,calc((100dvh - 195px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))/2));flex:none}.game-active .picture-label{font-size:10px;line-height:14px;padding:3px 10px;margin-left:9px}.game-active .scene{border-radius:12px;box-shadow:0 3px 0 #e6dac6}.game-active .helpbar{display:flex;position:static;min-height:56px;flex:none;padding:4px 8px;margin:0;box-shadow:none}.game-active .helpbar p{display:none}.game-active .helpbar .secondary{min-height:46px;font-size:12px;padding:8px 14px}.game-active .status{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden;white-space:nowrap;margin:0}.game-active .outcome{flex:none;margin:0;padding:9px 12px;gap:8px;border-radius:14px}.game-active .outcome h2{font-size:18px;line-height:1.4;margin:0}.game-active .outcome p{font-size:12px;line-height:1.5}.game-active .result-art{width:64px;height:64px}.game-active .result-copy{min-width:180px}.game-active .result-actions{gap:7px}.game-active .result-actions .primary,.game-active .result-actions .secondary{font-size:13px;padding:8px 17px;min-height:46px;box-shadow:none}.finished .helpbar{display:none}.finished .picture-card{width:min(100%,calc((100dvh - 285px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))/2))}
+@media(min-width:701px),(orientation:landscape){.game-active .pictures{flex-direction:row;gap:14px}.game-active .picture-card{width:min(calc((100vw - 40px - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px))/2),calc(100dvh - 175px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px)),520px)}.finished .picture-card{width:min(calc((100vw - 40px - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px))/2),calc(100dvh - 255px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px)),470px)}}
+@media(max-width:700px){.game-active .scorebar{grid-template-columns:1fr 1fr 58px}.game-active .sound{padding:4px 6px;font-size:11px;white-space:normal;line-height:1.3}.game-active .meter{padding:7px 10px}.game-active .meter strong{font-size:21px}.game-active .result-copy{min-width:160px}.game-active .result-actions{width:100%;justify-content:center}.game-active .outcome{flex-wrap:wrap;justify-content:center}.game-active .outcome .primary{width:auto}.game-active .result-copy{flex:1}.game-active .wrap{padding-bottom:max(8px,env(safe-area-inset-bottom))}}
+@media(max-height:450px){body:not(.game-active) .wrap{padding-top:10px;padding-bottom:10px}body:not(.game-active) .masthead{margin-bottom:10px}body:not(.game-active) .small-note,body:not(.game-active) .footer,body:not(.game-active) .local-tools{display:none}body:not(.game-active) .intro{margin:10px 0;padding:12px 16px}body:not(.game-active) .status{margin-bottom:5px}}
+/* 166: time choice and image zoom stay within the existing design. */
+.time-choice{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:14px;font-weight:700;color:var(--green-dark)}
+.time-choice input{width:22px;height:22px;accent-color:var(--green-dark)}
+.scene img,.scene svg{transform-origin:center center}
+.scene.zoomed{touch-action:none}
+.hint-mark{fill-opacity:.16;stroke-opacity:.55;filter:drop-shadow(0 0 14px #e9cb50)}
+</style>
+<style>
+.scene svg.fx{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+.joy-ring{fill:none;stroke:#f2c14e;stroke-width:14;animation:joyRing .7s ease-out forwards}
+.joy-star{font-size:54px;fill:#ffd65a;stroke:#fff;stroke-width:3;paint-order:stroke;animation:joyStar .8s ease-out forwards}
+.joy-word{font-size:64px;font-weight:900;fill:#ce514a;stroke:#fff;stroke-width:12;paint-order:stroke;font-family:"Hiragino Maru Gothic ProN",sans-serif;animation:joyWord 1.05s ease-out forwards}
+.meter.bump strong{display:inline-block;animation:joyBump .4s cubic-bezier(.3,1.8,.5,1)}
+@keyframes joyRing{from{opacity:1;transform:scale(.5)}to{opacity:0;transform:scale(1.6)}}
+@keyframes joyStar{from{opacity:1;transform:translate(0,0) scale(.4)}70%{opacity:1}to{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1)}}
+@keyframes joyWord{0%{opacity:0;transform:translateY(20px) scale(.7)}20%{opacity:1;transform:translateY(0) scale(1.08)}75%{opacity:1}100%{opacity:0;transform:translateY(-40px)}}
+@keyframes joyPop{from{transform:scale(.3)}to{transform:scale(1)}}
+@keyframes joyBump{0%{transform:scale(1)}40%{transform:scale(1.45)}100%{transform:scale(1)}}
+.joy-ring,.joy-star,.joy-word{transform-box:fill-box;transform-origin:center}
+@media(prefers-reduced-motion:reduce){.joy-ring,.joy-star,.joy-word,.meter.bump strong{animation:none!important}.joy{display:none}}
+.save-art{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+#outcome .result-actions{flex-wrap:wrap;justify-content:center}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header class="masthead"><div><p class="eyebrow">カギしっぽバスケ部 ・ あそびのじかん</p><h1>まちがいさがし</h1><p class="small-note">ドラとタマが、宇宙へ。ふたつの絵をよく見て、ちがうところを見つけよう。<br>ぜんぶ見つけたら、きれいな絵を保存できるよ。</p></div><div class="flower" aria-hidden="true">✦</div></header>
+<section class="selection" aria-label="問題を選ぶ"><label for="problemSelect">きょうの問題</label><select id="problemSelect"></select></section>
+<div class="scorebar"><div class="meter" id="clockBox"><small>のこりじかん</small><strong id="clock">60<em>秒</em></strong></div><div class="meter"><small>みつけた！</small><strong id="foundCount">0<em>/ 5</em></strong></div><button class="sound" id="soundToggle" type="button" aria-pressed="true">音：オン</button></div>
+<section class="intro" id="intro"><div><h2 id="introTitle">ちがいを見つけよう</h2><p id="introTime"></p><p>どちらの絵をタップしても大丈夫。<br>まちがえても、点数はへらないよ。</p><label class="time-choice"><input id="untimedChoice" type="checkbox">時間を気にせず遊ぶ</label></div><button type="button" class="primary" id="startButton" disabled>絵をよみこみ中…</button></section>
+<section class="outcome" id="outcome" hidden aria-live="polite"><div class="result-art" id="resultArt" aria-hidden="true"><img id="resultImg" alt="" src="clear_dora.png"></div><div class="result-copy"><h2 id="resultTitle"></h2><p id="resultText"></p></div><div class="result-actions"><a class="secondary save-art" id="saveArt" href="uchu1-original.png" download="kagishippo_uchu.png">きれいな絵を保存</a><a class="secondary save-art" id="saveWall" href="uchu1-wallpaper.png" download="kagishippo_uchu_machiuke.png">待ち受け用を保存</a><button type="button" class="primary" id="retryButton">もう一回</button><button type="button" class="secondary" id="resultMenuButton">問題をえらぶ</button></div></section>
+<section class="pictures" aria-label="ふたつの絵を見くらべる"><div class="picture-card"><span class="picture-label">もとの絵</span><button class="scene inactive" type="button" id="originalBoard" aria-label="もとの絵。ちがうところをタップ"><img id="originalImage" alt="もとの絵" draggable="false"><svg id="originalMarks" viewBox="0 0 1080 1080" aria-hidden="true"></svg><svg id="originalFx" class="fx" viewBox="0 0 1080 1080" aria-hidden="true"></svg></button></div><div class="picture-card"><span class="picture-label">ちがう絵</span><button class="scene inactive" type="button" id="differentBoard" aria-label="ちがう絵。ちがうところをタップ"><img id="differentImage" alt="ちがう絵" draggable="false"><svg id="differentMarks" viewBox="0 0 1080 1080" aria-hidden="true"></svg><svg id="differentFx" class="fx" viewBox="0 0 1080 1080" aria-hidden="true"></svg></button></div></section>
+<div class="helpbar"><button class="secondary" id="menuButton" type="button">問題をえらぶ</button><p>あと少し、どこだろう？<br>ヒントは1回だけ使えるよ。</p><button class="secondary" id="hintButton" type="button" disabled>ヒントを見る</button></div>
+<p class="status" id="status" role="status" aria-live="polite">スタートを押すと、時計がうごき出すよ。</p>
+<details id="problemList"><summary>ほかの問題で遊ぶ <span id="problemTotal"></span></summary><div class="problem-grid" id="problemGrid"></div></details>
+<details class="local-tools"><summary>この端末の問題を追加する</summary><p>このページと一緒に届いた問題を選んでね。</p><label>問題を選ぶ <input id="problemFiles" type="file" accept=".json,application/json" multiple></label><p id="loadMessage" role="status"></p></details>
+<footer class="footer">カギしっぽバスケ部</footer>
+</main>
+<script type="application/json" id="problem-data">{
+  "version": 1,
+  "problems": [
+    {
+      "version": 1,
+      "id": "uchu1",
+      "title": "宇宙へ、ドラとタマ",
+      "width": 1080,
+      "height": 1080,
+      "difficulty": "normal",
+      "timeLimit": 120,
+      "original": "uchu1-original.png",
+      "different": "uchu1-different.png",
+      "answerImage": "uchu1-answer.png",
+      "answers": [
+        {
+          "id": "1",
+          "x": 242.0,
+          "y": 162.0,
+          "r": 114,
+          "kind": "星座が、魚の骨に",
+          "itemId": "d1"
+        },
+        {
+          "id": "2",
+          "x": 538.0,
+          "y": 101.0,
+          "r": 88,
+          "kind": "ほうき星のしっぽが、猫のしっぽに",
+          "itemId": "d2"
+        },
+        {
+          "id": "3",
+          "x": 656.0,
+          "y": 312.0,
+          "r": 54,
+          "kind": "ヘルメットが、金魚鉢に",
+          "itemId": "d3"
+        },
+        {
+          "id": "4",
+          "x": 991.0,
+          "y": 456.0,
+          "r": 62,
+          "kind": "毛玉星人が、顔を洗っている",
+          "itemId": "d4"
+        },
+        {
+          "id": "5",
+          "x": 560.0,
+          "y": 982.0,
+          "r": 54,
+          "kind": "小さな月が、鈴に",
+          "itemId": "d5"
+        }
+      ]
+    }
+  ]
+}</script>
+<script>
+/* GAME_CORE_START — DOM-free rules also used by the local test runner. */
+const GameRules=(()=>{
+ const LIMITS={easy:90,normal:120,hard:150};
+ const safeImage=name=>typeof name==='string'&&name.length>0&&name.length<180&&!/^[.]/.test(name)&&!/[/\\:\x00-\x1f<>?#]/.test(name)&&/\.png$/i.test(name);
+ function validateProblem(raw){
+  if(!raw||typeof raw!=='object'||Array.isArray(raw)||raw.version!==1)throw new Error('問題の形を確かめてください。');
+  if(typeof raw.id!=='string'||!raw.id.trim()||raw.id.length>120||typeof raw.title!=='string'||!raw.title.trim()||raw.title.length>160)throw new Error('問題の名前が読み取れません。');
+  if(raw.width!==1080||raw.height!==1080||!Object.prototype.hasOwnProperty.call(LIMITS,raw.difficulty)||raw.timeLimit!==LIMITS[raw.difficulty])throw new Error('絵の大きさか制限時間が合っていません。');
+  if(!['original','different','answerImage'].every(k=>safeImage(raw[k])))throw new Error('絵は同じフォルダのPNGを指定してください。');
+  if(!Array.isArray(raw.answers)||raw.answers.length<1||raw.answers.length>30)throw new Error('答えの数を確かめてください。');
+  const ids=new Set();const answers=raw.answers.map(a=>{
+   if(!a||typeof a.id!=='string'||!a.id||ids.has(a.id)||!['x','y','r'].every(k=>typeof a[k]==='number'&&Number.isFinite(a[k]))||a.x<0||a.x>1080||a.y<0||a.y>1080||a.r<=0||a.r>300)throw new Error('答えの位置を確かめてください。');
+   ids.add(a.id);return {id:a.id,x:a.x,y:a.y,r:a.r,kind:typeof a.kind==='string'?a.kind:'',itemId:typeof a.itemId==='string'?a.itemId:''};
+  });return {version:1,id:raw.id,title:raw.title,width:1080,height:1080,difficulty:raw.difficulty,timeLimit:raw.timeLimit,original:raw.original,different:raw.different,answerImage:raw.answerImage,answers};
+ }
+ function unpack(data){const list=Array.isArray(data)?data:data&&Array.isArray(data.problems)?data.problems:[data];const out=list.map(validateProblem);if(!out.length)throw new Error('問題が入っていません。');const ids=new Set();for(const p of out){if(ids.has(p.id))throw new Error('問題の名前が重なっています。');ids.add(p.id);}return out;}
+ function createState(problem,untimed=false){return {untimed,status:'ready',startedAt:null,endedAt:null,found:[],hintUsed:false,hintId:null,cooldownUntil:0};}
+ function begin(state,now){return {...state,status:'running',startedAt:now,endedAt:null,found:[],hintUsed:false,hintId:null,cooldownUntil:0};}
+ function remaining(problem,state,now){if(state.untimed)return Infinity;if(state.status==='ready')return problem.timeLimit;if(state.status==='timeout')return 0;const end=state.endedAt===null?now:state.endedAt;return Math.max(0,problem.timeLimit-(end-state.startedAt)/1000);}
+ function advance(problem,state,now){return !state.untimed&&state.status==='running'&&remaining(problem,state,now)<=0?{...state,status:'timeout',endedAt:state.startedAt+problem.timeLimit*1000,hintId:null}:state;}
+ function pointAt(clientX,clientY,rect,width=1080,height=1080){if(!rect||rect.width<=0||rect.height<=0)return null;const x=(clientX-rect.left)/rect.width*width,y=(clientY-rect.top)/rect.height*height;return x>=0&&x<=width&&y>=0&&y<=height?{x,y}:null;}
+ function tap(problem,state,x,y,now){state=advance(problem,state,now);if(state.status!=='running'||now<state.cooldownUntil)return {state,type:'ignored'};const hit=problem.answers.filter(a=>Math.hypot(a.x-x,a.y-y)<=a.r*1.15).map(a=>[(state.found.includes(a.id)?1:0),Math.hypot(a.x-x,a.y-y)/a.r,a]).sort((p,q)=>p[0]-q[0]||p[1]-q[1]).map(v=>v[2])[0];/* 10/23 夜：当たりの円が重なる所（むずかしい6と7）は、まだ見つけていない・中心に近いほうを当たりに */if(hit&&state.found.includes(hit.id))return {state,type:'already'};
+  if(!hit)return {state:{...state,cooldownUntil:now+450},type:'wrong'};
+  const found=[...state.found,hit.id];const clear=found.length===problem.answers.length;return {state:{...state,found,cooldownUntil:now+160,hintId:state.hintId===hit.id?null:state.hintId,status:clear?'clear':'running',endedAt:clear?now:null},type:'found',answer:hit};}
+ function hint(problem,state,now){state=advance(problem,state,now);if(state.status!=='running'||state.hintUsed)return state;const answer=problem.answers.find(a=>!state.found.includes(a.id));return answer?{...state,hintUsed:true,hintId:answer.id}:state;}
+ return {LIMITS,safeImage,validateProblem,unpack,createState,begin,remaining,advance,pointAt,tap,hint};
+})();
+/* GAME_CORE_END */
+/* Zoom calculations are independent from DOM so taps still land on the same 1080px answer. */
+const ZoomRules=(()=>{
+ const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+ function point(p,z,panX,panY){return {x:540+(p.x-540-panX)/z,y:540+(p.y-540-panY)/z};}
+ function scaleAt(z,panX,panY,next,anchor){
+  next=clamp(next,1,3);
+  const before=point(anchor,z,panX,panY),max=(next-1)*540;
+  return {scale:next,panX:clamp(anchor.x-540-(before.x-540)*next,-max,max),panY:clamp(anchor.y-540-(before.y-540)*next,-max,max)};
+ }
+ return {point,scaleAt};
+})();
+(()=>{'use strict';
+ const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg',levelNames={easy:'やさしい',normal:'ふつう',hard:'むずかしい'};
+ const ui={select:$('problemSelect'),grid:$('problemGrid'),start:$('startButton'),hint:$('hintButton'),untimed:$('untimedChoice'),sound:$('soundToggle'),intro:$('intro'),outcome:$('outcome'),clock:$('clock'),clockBox:$('clockBox'),count:$('foundCount'),status:$('status')};
+ let zoom={scale:1,panX:0,panY:0},gesture=null,lastTap=0,suppressTapUntil=0;
+ let problems=[],current=null,state=null,imagesReady=false,loadVersion=0,interval=null,effectTimers=[],wrongMark=null,lastBeat=null,soundOn=true,audio=null,activeNodes=new Set();
+ const now=()=>performance.now();
+ function setStatus(text,error=false){ui.status.textContent=text;ui.status.classList.toggle('error',error);}
+ function stopSounds(close=false){for(const node of activeNodes){try{node.stop();}catch(_){}}activeNodes.clear();if(close&&audio){const old=audio;audio=null;old.close().catch(()=>{});}}
+ function audioReady(){if(!soundOn||!state||state.status!=='running')return;try{if(!audio){const Audio=window.AudioContext||window.webkitAudioContext;if(Audio)audio=new Audio();}if(audio&&audio.state==='suspended')audio.resume().catch(()=>{});}catch(_){audio=null;}}
+ function tone(freq,delay,length,gain){if(!soundOn||!audio||audio.state!=='running')return;const at=audio.currentTime+delay,o=audio.createOscillator(),g=audio.createGain();o.type='sine';o.frequency.setValueAtTime(freq,at);o.frequency.exponentialRampToValueAtTime(Math.max(60,freq*.58),at+length);g.gain.setValueAtTime(.0001,at);g.gain.exponentialRampToValueAtTime(gain,at+.008);g.gain.exponentialRampToValueAtTime(.0001,at+length);o.connect(g);g.connect(audio.destination);activeNodes.add(o);o.onended=()=>{activeNodes.delete(o);o.disconnect();g.disconnect();};o.start(at);o.stop(at+length+.01);}
+ function clickSound(){tone(1050,0,.065,.1);if(!soundOn||!audio||audio.state!=='running')return;const length=Math.floor(audio.sampleRate*.035),buffer=audio.createBuffer(1,length,audio.sampleRate),data=buffer.getChannelData(0);for(let i=0;i<length;i++)data[i]=(Math.random()*2-1)*(1-i/length);const source=audio.createBufferSource(),gain=audio.createGain(),filter=audio.createBiquadFilter();source.buffer=buffer;filter.type='highpass';filter.frequency.value=1500;gain.gain.value=.12;source.connect(filter);filter.connect(gain);gain.connect(audio.destination);activeNodes.add(source);source.onended=()=>{activeNodes.delete(source);source.disconnect();filter.disconnect();gain.disconnect();};source.start();}
+ function heartbeat(){tone(170,0,.075,.07);tone(130,.14,.065,.055);}
+ function clearEffects(){effectTimers.forEach(clearTimeout);effectTimers=[];wrongMark=null;}
+ function stopClock(){if(interval!==null)clearInterval(interval);interval=null;lastBeat=null;}
+ function cleanup(){stopClock();clearEffects();stopSounds(true);}
+ function applyZoom(){for(const id of ['originalBoard','differentBoard']){
+  const board=$(id),rect=board.getBoundingClientRect(),tx=zoom.panX*rect.width/1080,ty=zoom.panY*rect.height/1080;
+  board.classList.toggle('zoomed',zoom.scale>1.001);
+  for(const child of [board.querySelector('img'),board.querySelector('svg')])child.style.transform=`translate(${tx}px,${ty}px) scale(${zoom.scale})`;
+ }}
+ function resetZoom(){zoom={scale:1,panX:0,panY:0};applyZoom();}
+ function zoomAt(board,clientX,clientY,next){const p=GameRules.pointAt(clientX,clientY,board.getBoundingClientRect());if(!p)return;zoom=ZoomRules.scaleAt(zoom.scale,zoom.panX,zoom.panY,next,p);applyZoom();}
+ function touchDistance(a,b){return Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);}
+ function touchMid(a,b){return {x:(a.clientX+b.clientX)/2,y:(a.clientY+b.clientY)/2};}
+ function attachZoom(board){
+  /* 10/23 夜 作者「ダブルタップの拡大が邪魔」→ 外した。拡大は2本指だけ */
+  board.addEventListener('touchstart',e=>{if(e.touches.length===2){const [a,b]=e.touches;gesture={kind:'pinch',distance:touchDistance(a,b),scale:zoom.scale};e.preventDefault();}
+   else if(e.touches.length===1&&zoom.scale>1){const t=e.touches[0];gesture={kind:'pan',x:t.clientX,y:t.clientY,panX:zoom.panX,panY:zoom.panY};}}, {passive:false});
+  board.addEventListener('touchmove',e=>{if(!gesture)return;const rect=board.getBoundingClientRect();
+   if(gesture.kind==='pinch'&&e.touches.length===2){const [a,b]=e.touches,m=touchMid(a,b);zoomAt(board,m.x,m.y,gesture.scale*touchDistance(a,b)/gesture.distance);suppressTapUntil=Date.now()+450;e.preventDefault();}
+   else if(gesture.kind==='pan'&&e.touches.length===1){const t=e.touches[0],max=(zoom.scale-1)*540;zoom.panX=Math.max(-max,Math.min(max,gesture.panX+(t.clientX-gesture.x)*1080/rect.width));zoom.panY=Math.max(-max,Math.min(max,gesture.panY+(t.clientY-gesture.y)*1080/rect.height));applyZoom();suppressTapUntil=Date.now()+450;e.preventDefault();}}, {passive:false});
+  board.addEventListener('touchend',e=>{const t=e.changedTouches[0];if(gesture){gesture=null;lastTap=0;return;}if(!t||e.touches.length)return;
+   lastTap=Date.now();}, {passive:false});
+  board.addEventListener('touchcancel',()=>{gesture=null;lastTap=0;});
+ }
+ function circle(svg,a,cls){const node=document.createElementNS(NS,'circle');for(const [k,v] of Object.entries({cx:a.x,cy:a.y,r:a.r,class:cls}))node.setAttribute(k,String(v));svg.appendChild(node);}
+
+ /* 10/23 夜 作者「気持ちよさがないな」→ 見つけた瞬間に、輪・星・ことば・音・ふるえ・数字のはね */
+ function joy(a,n,total,last){if(!a)return;
+  const notes=last?[784,988,1175,1568]:[880+40*n,1320+60*n];notes.forEach((f,i)=>tone(f,i*.07,last?.32:.2,.13));
+  try{navigator.vibrate&&navigator.vibrate(last?[30,40,60]:25);}catch(_){}
+  for(const id of ['originalFx','differentFx']){const svg=$(id);if(!svg)continue;
+   const g=document.createElementNS(NS,'g');g.setAttribute('class','joy');g.style.transformOrigin=a.x+'px '+a.y+'px';
+   const ring=document.createElementNS(NS,'circle');ring.setAttribute('cx',a.x);ring.setAttribute('cy',a.y);ring.setAttribute('r',a.r);ring.setAttribute('class','joy-ring');g.appendChild(ring);
+   for(let k=0;k<8;k++){const t=k/8*Math.PI*2,st=document.createElementNS(NS,'text');st.setAttribute('x',a.x);st.setAttribute('y',a.y);st.setAttribute('text-anchor','middle');st.setAttribute('dominant-baseline','middle');st.setAttribute('class','joy-star');st.textContent=k%2?'✦':'★';st.style.setProperty('--dx',Math.cos(t)*a.r*1.6+'px');st.style.setProperty('--dy',Math.sin(t)*a.r*1.6+'px');g.appendChild(st);}
+   const w=document.createElementNS(NS,'text');w.setAttribute('x',Math.min(900,Math.max(180,a.x)));w.setAttribute('y',Math.max(90,a.y-a.r-30));w.setAttribute('text-anchor','middle');w.setAttribute('class','joy-word');w.textContent=last?'ぜんぶ みつけた！':'みつけた！ '+n+'/'+total;g.appendChild(w);
+   svg.appendChild(g);setTimeout(()=>g.remove(),1100);}
+  const m=document.querySelectorAll('.meter')[1];if(m){m.classList.remove('bump');void m.offsetWidth;m.classList.add('bump');}}
+ function drawMarks(){for(const id of ['originalMarks','differentMarks']){const svg=$(id);svg.replaceChildren();if(!current||!state)continue;for(const a of current.answers){if(state.found.includes(a.id))circle(svg,a,'found-mark');else if(state.status==='timeout')circle(svg,a,'reveal-mark');else if(state.hintId===a.id&&state.status==='running')circle(svg,{...a,r:a.r*1.35},'hint-mark');}if(wrongMark&&wrongMark.svgId===id&&state.status==='running'){const node=document.createElementNS(NS,'text');node.setAttribute('x',wrongMark.x);node.setAttribute('y',wrongMark.y);node.setAttribute('text-anchor','middle');node.setAttribute('dominant-baseline','middle');node.setAttribute('class','wrong-mark');node.textContent='×';svg.appendChild(node);}}}
+ function clearWords(p,sec){if(p.difficulty==='hard')return ['clear_dora.png','ドラ「…むずかしいのを、ぜんぶか。まいった」'];if(sec<=p.timeLimit/2)return ['clear_dora.png','ドラ「…はやい。スカウトしたい」'];return ['clear_tama.png','タマ「‥すごーい！ ぼくは寝てて、1つも見てない」'];}
+ function render(){if(!current||!state)return;document.body.classList.toggle('game-active',state.status!=='ready');document.body.classList.toggle('playing',state.status==='running');document.body.classList.toggle('finished',['clear','timeout'].includes(state.status));const remaining=GameRules.remaining(current,state,now());ui.clock.replaceChildren(document.createTextNode(state.untimed?'∞':String(Math.ceil(remaining))));const seconds=document.createElement('em');seconds.textContent='秒';ui.clock.appendChild(seconds);ui.clockBox.classList.toggle('urgent',!state.untimed&&(state.status==='running'&&remaining<=10||state.status==='timeout'));ui.count.replaceChildren(document.createTextNode(String(state.found.length)));const total=document.createElement('em');total.textContent='/ '+current.answers.length;ui.count.appendChild(total);ui.intro.hidden=state.status!=='ready';ui.outcome.hidden=!['clear','timeout'].includes(state.status);ui.outcome.classList.toggle('timeout',state.status==='timeout');ui.hint.disabled=state.status!=='running'||state.hintUsed;ui.hint.textContent=state.hintUsed?'ヒントを使ったよ':'ヒントを見る';ui.start.disabled=!imagesReady||state.status!=='ready';ui.start.textContent=imagesReady?'スタート':'絵をよみこみ中…';$('introTitle').textContent='ちがいを '+current.answers.length+'つ、みつけよう';$('introTime').textContent=levelNames[current.difficulty]+' / '+(ui.untimed.checked?'時間制限なし':current.timeLimit+'秒');for(const id of ['originalBoard','differentBoard'])$(id).classList.toggle('inactive',state.status!=='running');
+  if(state.status==='clear'){const sec=(state.endedAt-state.startedAt)/1000,c=clearWords(current,sec);$('resultTitle').textContent='ぜんぶ、みつけた！ '+sec.toFixed(1)+'秒';$('resultText').textContent=c[1];$('resultImg').src=c[0];$('resultArt').hidden=false;}else if(state.status==='timeout'){$('resultTitle').textContent='じかんになったよ';$('resultText').textContent='光っているところが、のこりの答えだよ。';$('resultImg').src='timeout_tama.png';$('resultArt').hidden=false;}drawMarks();}
+ function tick(){if(!state||state.status!=='running')return;const previous=state.status;state=GameRules.advance(current,state,now());if(state.status==='timeout'){stopClock();stopSounds();clearEffects();setStatus('じかん切れ。光っているところを見てみよう。');render();return;}const left=Math.ceil(GameRules.remaining(current,state,now()));if(left<=10&&left>0&&left!==lastBeat){lastBeat=left;heartbeat();}render();}
+ function begin(){if(!imagesReady||!current)return;cleanup();state=GameRules.begin(GameRules.createState(current,ui.untimed.checked),now());audioReady();setStatus('ちがうところを、どちらかの絵でタップしてね。');interval=setInterval(tick,100);render();}
+ function boardTap(event,imageId){if(!current||!state||event.detail===0||Date.now()<suppressTapUntil)return;const board=$(imageId==='originalImage'?'originalBoard':'differentBoard');const screenPoint=GameRules.pointAt(event.clientX,event.clientY,board.getBoundingClientRect());const point=screenPoint&&ZoomRules.point(screenPoint,zoom.scale,zoom.panX,zoom.panY);if(!point)return;const result=GameRules.tap(current,state,point.x,point.y,now()),previous=state.status;state=result.state;if(result.type==='found'){stopSounds();joy(current.answers.find(a=>a.id===state.found[state.found.length-1]),state.found.length,current.answers.length,state.status==='clear');wrongMark=null;if(state.status==='clear'){stopClock();clearEffects();setStatus('ぜんぶ見つけたね！');}else setStatus('みつけた！ あと'+(current.answers.length-state.found.length)+'つ。');}
+  else if(result.type==='wrong'){wrongMark={...point,svgId:imageId==='originalImage'?'originalMarks':'differentMarks'};effectTimers.push(setTimeout(()=>{wrongMark=null;drawMarks();},450));setStatus('ここは同じみたい。ゆっくり見くらべてね。');}
+  if(previous==='running'&&state.status==='timeout'){stopClock();stopSounds();clearEffects();setStatus('じかん切れ。光っているところを見てみよう。');}render();}
+ function choose(id){const p=problems.find(p=>p.id===id);if(!p)return;cleanup();const version=++loadVersion;current=p;state=GameRules.createState(p,ui.untimed.checked);imagesReady=false;resetZoom();ui.select.value=p.id;for(const b of ui.grid.querySelectorAll('button'))b.setAttribute('aria-current',String(b.dataset.id===p.id));setStatus('スタートを押すと、時計がうごき出すよ。');let loaded=0;
+  for(const [imageId,name] of [['originalImage',p.original],['differentImage',p.different]]){const image=$(imageId);image.onload=()=>{if(version!==loadVersion)return;if(image.naturalWidth!==1080||image.naturalHeight!==1080){setStatus('絵の大きさが合っていないので、この問題はお休みです。',true);return;}loaded++;if(loaded===2){imagesReady=true;render();}};image.onerror=()=>{if(version!==loadVersion)return;imagesReady=false;ui.start.disabled=true;ui.start.textContent='絵が見つかりません';setStatus('絵が見つかりません。ページと同じ場所に絵があるか、確かめてね。',true);};image.src=encodeURIComponent(name);}render();}
+ function rebuild(){ui.select.replaceChildren();ui.grid.replaceChildren();for(const p of problems){const option=document.createElement('option');option.value=p.id;option.textContent=p.title+' · '+levelNames[p.difficulty];ui.select.appendChild(option);const button=document.createElement('button');button.type='button';button.className='problem-button';button.dataset.id=p.id;const title=document.createElement('span');title.textContent=p.title;const note=document.createElement('small');note.textContent=levelNames[p.difficulty]+' / '+p.answers.length+'つ / '+p.timeLimit+'秒';button.append(title,note);button.addEventListener('click',()=>{choose(p.id);$('problemList').open=false;ui.start.focus({preventScroll:true});});ui.grid.appendChild(button);}$('problemTotal').textContent='（'+problems.length+'問）';}
+ function menu(){if(!current)return;cleanup();state=GameRules.createState(current,ui.untimed.checked);resetZoom();setStatus('好きな問題を選んで、スタートしてね。');render();ui.select.focus({preventScroll:true});}$('menuButton').addEventListener('click',menu);$('resultMenuButton').addEventListener('click',menu);
+ ui.untimed.addEventListener('change',()=>{if(state&&state.status==='ready'){state=GameRules.createState(current,ui.untimed.checked);render();}});ui.start.addEventListener('click',()=>{if(state&&state.status==='ready')begin();});$('retryButton').addEventListener('click',()=>begin());ui.select.addEventListener('change',()=>choose(ui.select.value));ui.hint.addEventListener('click',()=>{if(!current||!state)return;const old=state;state=GameRules.hint(current,state,now());if(state.hintUsed&&!old.hintUsed)setStatus('うっすら光っているあたりを、よく見てね。');if(state.status==='timeout'){stopClock();stopSounds();setStatus('じかん切れ。光っているところを見てみよう。');}render();});ui.sound.addEventListener('click',()=>{soundOn=!soundOn;ui.sound.textContent='音：'+(soundOn?'オン':'オフ');ui.sound.setAttribute('aria-pressed',String(soundOn));if(soundOn)audioReady();else stopSounds();});$('originalBoard').addEventListener('click',e=>boardTap(e,'originalImage'));$('differentBoard').addEventListener('click',e=>boardTap(e,'differentImage'));for(const id of ['originalBoard','differentBoard'])attachZoom($(id));window.addEventListener('resize',applyZoom);
+ $('problemFiles').addEventListener('change',async event=>{const version=loadVersion;try{const files=[...event.target.files];if(!files.length)return;const additions=[];for(const file of files){if(file.size>2_000_000)throw new Error('問題ファイルが大きすぎます。');additions.push(...GameRules.unpack(JSON.parse(await file.text())));}const map=new Map(problems.map(p=>[p.id,p]));for(const p of additions)map.set(p.id,p);problems=[...map.values()];rebuild();choose(additions[0].id);$('loadMessage').textContent=additions.length+'問を追加したよ。';}catch(error){$('loadMessage').textContent=error.message||'問題が読み取れませんでした。';}});
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick();});window.addEventListener('pagehide',cleanup);window.addEventListener('pageshow',()=>{if(state&&state.status==='running'){tick();if(state.status==='running'&&interval===null)interval=setInterval(tick,100);}});
+ try{problems=GameRules.unpack(JSON.parse($('problem-data').textContent));rebuild();choose(problems[0].id);}catch(error){ui.start.disabled=true;ui.start.textContent='問題を選んでね';setStatus('問題を読み取れませんでした。下から問題を選んでね。',true);}
+})();
+</script>
+<script>
+/* 10/23 夜 作者「画面がちっちゃくてやりにくい」：画面の大きさに合わせて、横ならび と 縦づみ のうち 絵が大きくなるほうを えらぶ */
+(function(){
+  function fit(){
+    var b=document.body; if(!b.classList.contains('game-active')) return;
+    var pics=document.querySelector('.pictures'); var cards=document.querySelectorAll('.picture-card'); if(!pics||!cards.length) return;
+    var W=document.documentElement.clientWidth, H=window.innerHeight;
+    var bar=(document.querySelector('.scorebar')||{}).offsetHeight||52;
+    var help=b.classList.contains('finished') ? 0 : ((document.querySelector('.helpbar')||{}).offsetHeight||56);
+    var out=document.querySelector('.outcome'); var outH=(out&&!out.hidden)?out.offsetHeight+8:0;
+    var free=H-bar-help-outH-16-8*3-34; /* 34＝ラベル2つ分のゆとり */
+    var side=Math.min((W-20-14)/2, free+17);
+    var stack=Math.min(W-20, (free-8)/2);
+    var row=side>=stack, size=Math.max(140, Math.floor(row?side:stack));
+    pics.style.flexDirection=row?'row':'column'; pics.style.gap=row?'14px':'8px';
+    cards.forEach(function(c){c.style.width=size+'px';});
+  }
+  window.addEventListener('resize',fit);
+  new MutationObserver(fit).observe(document.body,{attributes:true,attributeFilter:['class'],subtree:true,childList:true});
+  setTimeout(fit,0);
+})();
+</script>
+</body>
+</html>
