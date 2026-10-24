@@ -3,6 +3,60 @@
   "problems": [
     {
       "version": 1,
+      "id": "hw2",
+      "title": "ハロウィンの夜、ほうきで",
+      "width": 1440,
+      "height": 1080,
+      "difficulty": "normal",
+      "timeLimit": 120,
+      "original": "hw2-original.png",
+      "different": "hw2-different.png",
+      "answerImage": "hw2-answer.png",
+      "answers": [
+        {
+          "id": "1",
+          "x": 393.0,
+          "y": 898.0,
+          "r": 91,
+          "kind": "かぼちゃの家が、寝ている",
+          "itemId": "h1"
+        },
+        {
+          "id": "2",
+          "x": 487.0,
+          "y": 643.0,
+          "r": 141,
+          "kind": "ほうきの穂が、猫じゃらしに",
+          "itemId": "h2"
+        },
+        {
+          "id": "3",
+          "x": 1000.0,
+          "y": 850.0,
+          "r": 62,
+          "kind": "おばけ猫が、魔女の帽子",
+          "itemId": "h3"
+        },
+        {
+          "id": "4",
+          "x": 1331.0,
+          "y": 105.0,
+          "r": 60,
+          "kind": "コウモリが、サンマに",
+          "itemId": "h4"
+        },
+        {
+          "id": "5",
+          "x": 1110.0,
+          "y": 230.0,
+          "r": 81,
+          "kind": "月のもようが、肉球に",
+          "itemId": "h5"
+        }
+      ]
+    },
+    {
+      "version": 1,
       "id": "uchu1",
       "title": "宇宙へ、ドラとタマ",
       "width": 1440,
