@@ -38,7 +38,7 @@
 #outcome .result-actions{flex-wrap:wrap;justify-content:center}
 
 /* 10/24 作者「画面の上下、半分ずつで絵を見たい」：スマホの縦では、時計や数のバーを細くして、絵を画面いっぱい（上下に半分ずつ）にする */
-@media (max-width:700px) and (orientation:portrait){
+@media (max-width:700px){
 .game-active .wrap{padding:max(4px,env(safe-area-inset-top,0px)) 0 max(4px,env(safe-area-inset-bottom,0px));gap:4px}
 .game-active .scorebar{grid-template-columns:1fr 1fr 64px!important;gap:6px;padding:0 6px}
 .game-active .meter{min-height:38px!important;padding:2px 10px!important;border-width:1.5px;border-radius:10px}
@@ -46,12 +46,11 @@
 .game-active .meter strong{font-size:19px!important}
 .game-active .sound{min-height:38px!important;padding:2px 4px!important;font-size:10px!important;border-radius:10px}
 .game-active .pictures{gap:4px!important}
-.game-active .picture-card{position:relative;width:min(100vw,calc((100dvh - 108px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))/2))!important}
+.game-active .picture-card{position:relative}
 .game-active .picture-label{position:absolute;z-index:2;top:6px;left:6px;margin:0!important;border:0;border-radius:8px!important;background:rgba(255,253,248,.82)!important;font-size:10px!important;padding:2px 8px!important}
 .game-active .scene{border:0!important;border-radius:0!important;box-shadow:none!important}
 .game-active .helpbar{min-height:44px!important;padding:2px 6px!important;border-radius:0;border-left:0;border-right:0}
 .game-active .helpbar .secondary{min-height:40px!important;padding:6px 14px!important}
-.finished .picture-card{width:min(100vw,calc((100dvh - 230px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))/2))!important}
 }
 </style>
 </head>
@@ -245,11 +244,11 @@ const ZoomRules=(()=>{
     var bar=(document.querySelector('.scorebar')||{}).offsetHeight||52;
     var help=b.classList.contains('finished') ? 0 : ((document.querySelector('.helpbar')||{}).offsetHeight||56);
     var out=document.querySelector('.outcome'); var outH=(out&&!out.hidden)?out.offsetHeight+8:0;
-    var free=H-bar-help-outH-16-8*3-34; /* 34＝ラベル2つ分のゆとり */
-    var side=Math.min((W-20-14)/2, free+17);
-    var stack=Math.min(W-20, (free-8)/2);
+    var small=W<=700, free=H-bar-help-outH-(small?16:16+8*3+34); /* スマホは 名札を 絵の 上に 重ねたので ゆとり不要 */
+    var side=Math.min((W-(small?8:34))/2, free+(small?0:17));
+    var stack=Math.min(W-(small?0:20), (free-(small?4:8))/2);
     var row=side>=stack, size=Math.max(140, Math.floor(row?side:stack));
-    pics.style.flexDirection=row?'row':'column'; pics.style.gap=row?'14px':'8px';
+    pics.style.flexDirection=row?'row':'column'; pics.style.gap=row?(small?'6px':'14px'):(small?'4px':'8px');
     cards.forEach(function(c){c.style.width=size+'px';});
   }
   window.addEventListener('resize',fit);
