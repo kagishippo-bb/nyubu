@@ -306,8 +306,8 @@ main.play-view { max-width: none; padding: 2px 2px 12px; }
   body.playing .site-header, body.playing .site-footer { display: none; }
   body.playing main.play-view { display: flex; flex-direction: column; height: var(--vh, 100dvh); padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); overflow: hidden; }
   body.playing .play-note, body.playing .character-guide, body.playing .zoom-reset, body.playing .play-heading .sub { display: none; }
-  body.playing .play-top { display: flex; flex: none; align-items: center; gap: 4px; height: 46px; margin: 0; padding: 1px 4px; }
-  .play-quit { flex: none; width: 60px; min-height: 44px; padding: 0; font-size: .8rem; border-radius: 10px; }
+  body.playing .play-top { display: flex; flex: none; align-items: center; gap: 4px; height: 54px; margin: 0; padding: 1px 4px; }
+  .play-quit { flex: none; width: 46px; min-height: 44px; padding: 0; font-size: .8rem; border-radius: 10px; }
   body.playing .play-heading { flex: 1 1 0; min-width: 0; }
   body.playing .play-heading h2 { margin: 0; overflow: hidden; font-size: .82rem; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
   body.playing .play-top .count { flex: none; min-width: 0; padding: 3px 7px; font-size: .74rem; }
@@ -316,7 +316,7 @@ main.play-view { max-width: none; padding: 2px 2px 12px; }
   body.playing .play-toolbar button { min-height: 44px; padding: 0 1px; border-radius: 10px; font-size: .76rem; }
   .level-swap { font-size: .68rem !important; line-height: 1.15; }
   .level-swap small { display: block; color: var(--muted); font-size: .58rem; }
-  body.playing .play-dock .hint-line { position: fixed; z-index: 9; top: 1px; left: 68px; display: flex; align-items: center; width: 160px; height: 44px; min-height: 0; margin: 0; padding: 0 2px; overflow: hidden; border: 0; border-radius: 0; color: var(--ink); background: var(--paper); font-size: .68rem; font-weight: 700; line-height: 1.25; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  body.playing .play-dock .hint-line { position: fixed; z-index: 9; top: 1px; left: 54px; display: flex; align-items: center; width: 150px; height: 52px; min-height: 0; margin: 0; padding: 0 2px; overflow: hidden; border: 0; border-radius: 0; color: var(--ink); background: var(--paper); font-size: .68rem; font-weight: 700; line-height: 1.25; opacity: 0; transition: opacity .2s; pointer-events: none; }
   body.playing .play-dock .hint-line.show { opacity: 1; }
   body.playing .picture-grid { flex: none; width: min(100%, calc((100dvh - 94px) * 2 / 3)); margin: 0 auto; gap: 2px; }
   body.playing .picture-panel { position: relative; min-width: 0; }
@@ -350,7 +350,12 @@ main.play-view { max-width: none; padding: 2px 2px 12px; }
 @media (max-width: 699px) and (orientation: portrait) {
   body.playing .picture-grid { overflow: visible; }
   body.playing .picture-stage { overflow: visible; clip-path: inset(0 -50vw); }
-  body.playing .mini { right: calc(4px - var(--side, 0px)); }
 }
 /* 札がふえても、SE の1画面に次のボタンが入るように */
 @media (max-width: 699px) { .clear-screen > p:not([class]) { display: none; } .clear-screen h2 { margin: .2rem 0; } .clear-screen .gold-line, .clear-screen .perfect-line { margin-block: .1rem; font-size: 1rem; } }
+/* 10/31 スマホの地図は絵に一切かけず、上の列に（押して飛べるまま） */
+@media (max-width: 699px), (max-height: 500px) {
+  .play-top .mini { position: relative; right: auto; bottom: auto; display: block; flex: none; width: 69px; height: 52px; visibility: hidden; box-shadow: 0 0 0 1px var(--line); }
+  .play-top.zoomed .mini { visibility: visible; }
+  body.playing .play-timer { min-width: 3.1rem; padding-inline: 5px; }
+}

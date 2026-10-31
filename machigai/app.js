@@ -243,6 +243,7 @@
     const transform = pictureTransform(pictureZoom);
     main.querySelectorAll('.picture-content').forEach(content => { content.style.transform = transform; });
     main.querySelectorAll('.picture-stage').forEach(stage => stage.classList.toggle('zoomed', pictureZoom.scale > 1));
+    main.querySelector('.play-top')?.classList.toggle('zoomed', pictureZoom.scale > 1);
     const reset = document.getElementById('zoom-reset');
     if (reset) reset.disabled = pictureZoom.scale === 1;
     const mag = document.getElementById('zoom-mag');
@@ -581,13 +582,15 @@
   }
   function cornCount() { return months().filter(m => cornOf(m) && state.corn?.[m.id]).length; }
   function cornTotal() { return months().filter(m => cornOf(m)).length; }
+  // 小さな地図。スマホは絵に重ねず上の列に置く（10/31 BJ さん「ダメだね」：2月の種の袋をかくしていた）
+  function miniHTML(month) { return `<div class="mini" aria-hidden="true" style="background-image:url('${safeText(month.thumbnail || month.original)}')"><canvas width="168" height="126"></canvas><b></b></div>`; }
   function picturePanel(month, level, side) {
     const original = side === 'original';
     const src = pictureSrc(month, level, side);
     const heading = `<h3>${original ? 'もとの絵' : 'ちがうところを探す絵'}</h3>`;
     return `<section class="picture-panel">${heading}
       <div class="picture-stage loading" data-side="${side}" data-panel="${original ? 'reference' : 'comparison'}" aria-label="${original ? 'もとの絵' : 'ちがいのある絵'}。指やマウスで場所を押せます。">
-        ${original ? `<div class="mini" aria-hidden="true" style="background-image:url('${safeText(month.thumbnail || month.original)}')"><canvas width="168" height="126"></canvas><b></b></div>` : ''}
+        ${original && !matchMedia(PHONE).matches ? miniHTML(month) : ''}
         <div class="picture-content"><img src="${safeText(src)}" width="${Number(month.width) || 1440}" height="${Number(month.height) || 1080}" alt="${safeText(titleOf(month))}・${original ? 'もとの絵' : levelName[level]}" draggable="false">
         <div class="marker-layer" data-markers="${side}">${markerHTML(month, level, side)}</div></div>
         <div class="picture-loading" role="status">絵を読み込んでいます…</div>
@@ -613,8 +616,9 @@
     setScreen('play', `<div class="play-top">
         <button class="phone-only play-quit" data-action="home" aria-label="月選びへ戻る">終了</button>
         <div class="play-heading"><h2>${safeText(titleOf(month))}</h2><div class="sub">${levelName[level]}｜どちらの絵も押せます</div></div>
+        ${matchMedia(PHONE).matches ? miniHTML(month) : ''}
         <button class="zoom-reset" id="zoom-reset" data-action="reset-zoom" aria-label="2枚の絵を元の大きさに戻す" disabled>元の大きさ</button>
-        <div class="count" id="found-count" aria-live="polite">${count} / ${total} 発見</div>
+        <div class="count" id="found-count" aria-live="polite">${count} / ${total}<span class="wide-only"> 発見</span></div>
         ${total && count < total ? '<div class="play-timer" id="play-timer" aria-label="のこり時間（切れても続けられます）" style="--p:1"><i></i><span>2:00</span></div>' : ''}
       </div>
       <div class="play-dock">
@@ -1006,7 +1010,7 @@
     missRow = 0; const row = rowUsed[key] = (rowUsed[key] || 0) + 1;
     justFound = i; refreshMarkers(); justFound = null;
     const counter = document.getElementById('found-count');
-    counter.textContent = `${found.size} / ${spots(month, level).length} 発見`;
+    counter.firstChild.textContent = `${found.size} / ${spots(month, level).length}`;
     counter.classList.remove('bump'); void counter.offsetWidth; counter.classList.add('bump');
     const complete = found.size >= spots(month, level).length;
     lastClearPerfect = complete && row >= spots(month, level).length;
