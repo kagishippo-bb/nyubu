@@ -25,11 +25,13 @@
   function limitPictureZoom(value) {
     const scale = Math.max(1, Math.min(4, Number(value.scale) || 1));
     const bound = 1 - scale;
-    return {scale, x: Math.max(bound, Math.min(0, Number(value.x) || 0)),
+    // 拡大中は絵が左右の余白まで広がるので、動かせる幅をそのぶん内側に
+    const room = scale > 1 ? sideRoom : 0, left = -room, right = bound + room;
+    return {scale, x: right > left ? bound / 2 : Math.max(right, Math.min(left, Number(value.x) || 0)),
                    y: Math.max(bound, Math.min(0, Number(value.y) || 0))};
   }
   function sourcePicturePoint(point, zoom) {
-    if (point.x < 0 || point.x > 1 || point.y < 0 || point.y > 1) return null;
+    if (point.x < -sideRoom || point.x > 1 + sideRoom || point.y < 0 || point.y > 1) return null;
     const x = (point.x - zoom.x) / zoom.scale, y = (point.y - zoom.y) / zoom.scale;
     return x >= 0 && x <= 1 && y >= 0 && y <= 1 ? {x, y} : null;
   }
@@ -94,6 +96,7 @@
     }
   }
   const pictureZoom = {scale: 1, x: 0, y: 0};
+  let sideRoom = 0;   // スマホの縦で絵の左右に余る幅（絵の幅を1として片側ぶん）
   const touchGesture = new PictureTouchGesture();
   let touchStage = null;
   let touchBlockedUntilLift = false;
@@ -113,7 +116,13 @@
       const bars = main.querySelector('.play-top').offsetHeight + main.querySelector('.play-dock').offsetHeight;
       const free = height - bars - 2;
       const byHeight = matchMedia('(orientation: landscape)').matches ? free * 8 / 3 + 2 : (free - 2) * 2 / 3;
-      grid.style.width = `${Math.floor(Math.max(80, Math.min(main.clientWidth, byHeight)))}px`;
+      const width = Math.floor(Math.max(80, Math.min(main.clientWidth, byHeight)));
+      grid.style.width = `${width}px`;
+      const side = matchMedia('(orientation: landscape)').matches ? 0 : (main.clientWidth - width) / 2;
+      grid.style.setProperty('--side', `${side}px`);
+      sideRoom = side / width;
+      Object.assign(pictureZoom, limitPictureZoom(pictureZoom));
+      applyPictureZoom();
       return;
     }
     if (matchMedia('(min-width: 700px) and (orientation: landscape)').matches) {
@@ -138,7 +147,8 @@
   let soundEnabled = true;
   try { soundEnabled = localStorage.getItem('kagishippo-sound') !== 'off'; } catch (_) {}
   let soundContext = null;
-  function foundSound(complete = false) {
+  const SCALE = [1, 9/8, 5/4, 3/2, 5/3, 2];   // はずさず続けて見つけると、音が1段ずつ上がる
+  function foundSound(complete = false, row = 1) {
     if (!soundEnabled) return;
     const Audio = window.AudioContext || window.webkitAudioContext;
     if (!Audio) return;
@@ -146,9 +156,10 @@
       soundContext ||= new Audio();
       if (soundContext.state === 'suspended') soundContext.resume().catch(() => {});
       const at = soundContext.currentTime;
+      const up = complete ? (row >= 5 ? 4/3 : 1) : SCALE[Math.min(row, SCALE.length) - 1];
       (complete ? [880, 1108.73, 1318.51, 1760] : [880, 1174.66]).forEach((frequency, i) => {
         const oscillator = soundContext.createOscillator(), gain = soundContext.createGain();
-        oscillator.type = 'sine'; oscillator.frequency.value = frequency;
+        oscillator.type = 'sine'; oscillator.frequency.value = frequency * up;
         const start = at + i * (complete ? 0.09 : 0.065);
         gain.gain.setValueAtTime(0, start);
         gain.gain.linearRampToValueAtTime(0.055, start + 0.008);
@@ -181,9 +192,28 @@
   const tickSound = last => glideSound(last ? 1175 : 880, last ? 1175 : 880, 0.05, 'sine', last ? 0.05 : 0.035);
   // ゆるい制限時間（10/29 BJ さん「2分ぐらいのゆるい感じ」）。切れても終わらない・2分以内のふつうは金のスタンプ・残り30秒で少しあせらせる
   const TIME_LIMIT = 120;
-  let playTimer = null, lastClearGold = false;
+  let playTimer = null, lastClearGold = false, lastClearLate = false, lastClearPerfect = false;
   // 10/30 はじめての目：答えを見た絵は金なし・出入りしても時間は続きから（「ふつう」を押しなおすと 2:00 にもどり、答えを見ても金が出た）
   const helpUsed = new Set(), timerUsed = {};
+  // 10/31 BJ さん OK：3回つづけてはずれたら2秒押せない・金は「はずれ3回まで」・はずさず全部で「ひと目で全部」
+  const missUsed = {}, rowUsed = {}, GOLD_MISSES = 3, REST_AFTER = 3, REST_MS = 2000;
+  let missRow = 0, restUntil = 0, restTimer = 0, lastTapMissed = false;
+  function endRest() { clearTimeout(restTimer); restUntil = 0; main.querySelector('.picture-grid')?.classList.remove('resting'); }
+  function startRest() {
+    missRow = 0; restUntil = performance.now() + REST_MS;
+    main.querySelector('.picture-grid')?.classList.add('resting');
+    const line = document.getElementById('hint-line');
+    if (line) line.textContent = '3回はずれ。2秒 休けい。よく見てね。';
+    restTimer = setTimeout(endRest, REST_MS);
+  }
+  // 2回たたいて拡大するときの1回目は、はずれに数えない
+  function undoMiss(key) {
+    if (!lastTapMissed) return;
+    lastTapMissed = false;
+    missUsed[key] = Math.max(0, (missUsed[key] || 1) - 1);
+    missRow = Math.max(0, missRow - 1);
+    if (restUntil) { endRest(); missRow = REST_AFTER - 1; }
+  }
   function stopTimer() { if (playTimer) clearInterval(playTimer.id); playTimer = null; }
   function timerLeft() { return playTimer ? Math.max(0, TIME_LIMIT - playTimer.used / 1000) : 0; }
   function startTimer(key) {
@@ -218,7 +248,40 @@
     const mag = document.getElementById('zoom-mag');
     if (mag) mag.textContent = pictureZoom.scale > 1 ? '🔍全体' : '🔍2倍';
     const z = pictureZoom;
-    main.querySelectorAll('.mini b').forEach(box => { box.style.cssText = `left:${-z.x / z.scale * 100}%;top:${-z.y / z.scale * 100}%;width:${100 / z.scale}%;height:${100 / z.scale}%`; });
+    const room = z.scale > 1 ? sideRoom : 0, viewLeft = (-z.x - room) / z.scale, viewWidth = (1 + 2 * room) / z.scale;
+    main.querySelectorAll('.mini b').forEach(box => { box.style.cssText = `left:${viewLeft * 100}%;top:${-z.y / z.scale * 100}%;width:${viewWidth * 100}%;height:${100 / z.scale}%`; });
+    // 見た所の印：寄って見た所だけ、地図のうす暗さが消える
+    if (z.scale > 1) main.querySelectorAll('.mini canvas').forEach(c => c.getContext('2d').clearRect(viewLeft * c.width, -z.y / z.scale * c.height, viewWidth * c.width, c.height / z.scale));
+  }
+  // スマホは全体を約1.5秒見せてから、ゆっくり2倍へ寄る（10/31 BJ さん「やっぱちっちゃくて微妙」→ ドラ社長の案）。
+  // 🔍全体を押した人には、そのあとも全体で始める。絵を押したら寄らない。
+  let autoZoomTimer = 0, wantZoom = true;
+  function glideZoom(target) {
+    const contents = main.querySelectorAll('.picture-content');
+    contents.forEach(content => content.classList.add('gliding'));
+    Object.assign(pictureZoom, limitPictureZoom(target));
+    applyPictureZoom();
+    setTimeout(() => contents.forEach(content => content.classList.remove('gliding')), 750);
+  }
+  function startAutoZoom() {
+    clearTimeout(autoZoomTimer);
+    if (!matchMedia(PHONE).matches || !wantZoom) return;
+    const wait = () => {
+      if (view.screen !== 'play') return;
+      if (!picturesReady()) { autoZoomTimer = setTimeout(wait, 100); return; }
+      autoZoomTimer = setTimeout(() => {
+        if (view.screen === 'play' && pictureZoom.scale === 1 && !touchGesture.active) glideZoom({scale: 2, x: -.5, y: -.5});
+      }, 1500);
+    };
+    wait();
+  }
+  // 小さな地図：押した所・なぞった所が真ん中に来る
+  let miniDrag = null;
+  function miniMove(mini, clientX, clientY) {
+    const rect = mini.getBoundingClientRect(), scale = pictureZoom.scale;
+    const px = (clientX - rect.left) / rect.width, py = (clientY - rect.top) / rect.height;
+    Object.assign(pictureZoom, limitPictureZoom({scale, x: .5 - px * scale, y: .5 - py * scale}));
+    applyPictureZoom();
   }
   function resetPictureInteraction() {
     if (touchGesture.active) touchBlockedUntilLift = true;
@@ -234,6 +297,9 @@
   function preventOwnedGesture(event) { if (event.cancelable) event.preventDefault(); }
   function touchStart(event) {
     if (touchBlockedUntilLift) return preventOwnedGesture(event);
+    const mini = event.target.closest?.('.mini');
+    if (mini) { miniDrag = mini; preventOwnedGesture(event); return miniMove(mini, event.touches[0].clientX, event.touches[0].clientY); }
+    if (event.target.closest?.('.picture-stage')) clearTimeout(autoZoomTimer);
     const stage = event.target.closest?.('.picture-stage');
     if (!touchGesture.active && (!stage || !picturesReady())) return;
     if (!touchGesture.active) touchStage = stage;
@@ -243,7 +309,8 @@
     if (points.length > 1) {
       // A second finger outside the originating picture cancels the answer
       // candidate, but does not move the pictures from an unrelated control.
-      if (points.some(p => p.x < rect.left || p.x > rect.right || p.y < rect.top || p.y > rect.bottom)) touchGesture.cancel(points.length);
+      const side = sideRoom * rect.width;
+      if (points.some(p => p.x < rect.left - side || p.x > rect.right + side || p.y < rect.top || p.y > rect.bottom)) touchGesture.cancel(points.length);
       preventOwnedGesture(event);
     }
   }
@@ -265,6 +332,7 @@
     applyPictureZoom();
   }
   function touchMove(event) {
+    if (miniDrag) { preventOwnedGesture(event); return miniMove(miniDrag, event.touches[0].clientX, event.touches[0].clientY); }
     if (touchBlockedUntilLift) return preventOwnedGesture(event);
     if (!touchGesture.active) return;
     if (!touchStage?.isConnected || !picturesReady()) { touchGesture.cancel(event.touches.length); return; }
@@ -289,6 +357,7 @@
   }
   function touchEnd(event) {
     panFrom = null;
+    if (miniDrag) { miniDrag = null; return preventOwnedGesture(event); }
     if (touchBlockedUntilLift) {
       preventOwnedGesture(event);
       if (!event.touches.length) { touchBlockedUntilLift = false; touchGesture.reset(); touchStage = null; }
@@ -301,11 +370,12 @@
     if (result.wasMulti) preventOwnedGesture(event);
     if (!touchGesture.active) touchStage = null;
     if (result.tap && stage?.isConnected && picturesReady()) {
-      if (isDoubleTap(stage, result.point.x, result.point.y)) return doubleTapZoom(stage, result.point.x, result.point.y);
+      if (isDoubleTap(stage, result.point.x, result.point.y)) { undoMiss(gameKey(selectedMonth(), view.level)); return doubleTapZoom(stage, result.point.x, result.point.y); }
       tapStage(stage, result.point.x, result.point.y, 'touch');
     }
   }
   function touchCancel(event) {
+    miniDrag = null;
     if (!touchGesture.active && !touchBlockedUntilLift) return;
     touchGesture.cancel(event.touches.length);
     if (!event.touches.length) { touchBlockedUntilLift = false; touchStage = null; }
@@ -409,6 +479,7 @@
   function monthById(id) { return months().find(m => m.id === id); }
   function setScreen(name, html) {
     stopTimer();
+    clearTimeout(autoZoomTimer);
     resetPictureInteraction();
     view.screen = name;
     main.classList.toggle('play-view', name === 'play');
@@ -436,7 +507,7 @@
           <button class="${h ? 'done' : ''}" data-action="play" data-id="${safeText(m.id)}" data-level="hard">むずかしい</button></div>
         </div></article>`;
     }).join('');
-    setScreen('home', `<div class="intro"><div><h2>月をえらんでね</h2><p>2枚の絵を見くらべて、ちがうところを押してみよう。<span class="wide-only">1枚2分がめやす。時間が切れても続けられるよ。2分以内にふつうをクリアすると、金のスタンプ。</span></p></div></div>
+    setScreen('home', `<div class="intro"><div><h2>月をえらんでね</h2><p>2枚の絵を見くらべて、ちがうところを押してみよう。<span class="wide-only">1枚2分がめやす。時間が切れても続けられるよ。2分以内・はずれ3回までで ふつうをクリアすると、金のスタンプ。</span></p></div></div>
       <div class="home-passport">${passportHTML()}</div>${cornHomeHTML()}<div class="month-grid">${cards}</div>
       <div class="home-bottom"><button data-action="sound" aria-pressed="${soundEnabled}">${soundEnabled ? '音あり' : '音なし'}</button>${allNormalDone() ? '<button class="primary" data-action="ending">エンディングを見る</button>' : '<span class="explain">手帳のスタンプが12個そろうと、エンディングがひらきます。</span>'}
         <button class="danger" data-action="reset">進み具合をリセット</button></div>${characterGuideHTML()}`);
@@ -516,7 +587,7 @@
     const heading = `<h3>${original ? 'もとの絵' : 'ちがうところを探す絵'}</h3>`;
     return `<section class="picture-panel">${heading}
       <div class="picture-stage loading" data-side="${side}" data-panel="${original ? 'reference' : 'comparison'}" aria-label="${original ? 'もとの絵' : 'ちがいのある絵'}。指やマウスで場所を押せます。">
-        ${original ? `<div class="mini" aria-hidden="true" style="background-image:url('${safeText(month.thumbnail || month.original)}')"><b></b></div>` : ''}
+        ${original ? `<div class="mini" aria-hidden="true" style="background-image:url('${safeText(month.thumbnail || month.original)}')"><canvas width="168" height="126"></canvas><b></b></div>` : ''}
         <div class="picture-content"><img src="${safeText(src)}" width="${Number(month.width) || 1440}" height="${Number(month.height) || 1080}" alt="${safeText(titleOf(month))}・${original ? 'もとの絵' : levelName[level]}" draggable="false">
         <div class="marker-layer" data-markers="${side}">${markerHTML(month, level, side)}</div></div>
         <div class="picture-loading" role="status">絵を読み込んでいます…</div>
@@ -536,6 +607,7 @@
   function renderPlay(month, level) {
     if (!month || !LEVELS.includes(level)) return renderHome();
     view.month = month.id; view.level = level; view.hint = 0; view.revealed = false; view.hintIndex = null;
+    endRest(); missRow = 0; lastTapMissed = false; lastClearPerfect = false;
     const count = foundSet(month, level).size, total = spots(month, level).length;
     const other = level === 'normal' ? 'hard' : 'normal';
     setScreen('play', `<div class="play-top">
@@ -556,14 +628,16 @@
           <button data-action="answer">答えを見る</button>
           <button data-action="skip" aria-label="次へ進む。発見記録は増えません">次へ</button>
         </div>
-        <div class="hint-line" id="hint-line" role="status" aria-live="polite">${!total ? 'この月の違いは準備中です。' : level === 'hard' && cornOf(month) && !state.corn?.[month.id] ? '違うところを押してね。トウモロコシも1本かくれているよ。' : matchMedia(PHONE).matches ? '違うところを押してね。🔍で2倍になるよ。' : '違うところを押してね。2回たたくか、2本指で広げると拡大します。'}</div>
+        <div class="hint-line" id="hint-line" role="status" aria-live="polite">${!total ? 'この月の違いは準備中です。' : level === 'hard' && cornOf(month) && !state.corn?.[month.id] ? '違うところを押してね。トウモロコシも1本かくれているよ。' : matchMedia(PHONE).matches ? '指で絵を動かして、違うところを押してね。' : '違うところを押してね。2回たたくか、2本指で広げると拡大します。'}</div>
       </div>
       <div class="picture-grid">${picturePanel(month, level, 'original')}${picturePanel(month, level, 'changed')}</div>
-      <p class="play-note">間違えて押しても減点はありません。ヒントや答えでは発見数は増えません。拡大中は1本指で絵を動かせます。</p>${characterGuideHTML()}`);
+      <p class="play-note">3回つづけてはずれると、2秒だけ押せません。ヒントや答えでは発見数は増えません。拡大中は1本指で絵を動かせます。</p>${characterGuideHTML()}`);
     preparePictureLoads();
     fitPicturePair();
     schedulePictureFit();
+    main.querySelectorAll('.mini canvas').forEach(c => { const g = c.getContext('2d'); g.fillStyle = 'rgba(30, 25, 40, .55)'; g.fillRect(0, 0, c.width, c.height); });
     watchHintLine();
+    if (total && count < total) startAutoZoom();
     preloadNext(month, level);
     lastClearGold = false;
     if (total && count < total) startTimer(gameKey(month, level));
@@ -574,6 +648,9 @@
   function watchHintLine() {
     const line = document.getElementById('hint-line');
     const show = () => {
+      // スマホの札は絵にかけず、上の列の題名の所に出す
+      const title = main.querySelector('.play-heading')?.getBoundingClientRect();
+      if (title && matchMedia(PHONE).matches) { line.style.left = `${title.left}px`; line.style.width = `${title.width}px`; }
       line.classList.add('show');
       clearTimeout(hintTimer);
       hintTimer = setTimeout(() => line.classList.remove('show'), 3500);
@@ -600,11 +677,14 @@
     const found = foundSet(month, level);
     const index = spots(month, level).findIndex((_, i) => !found.has(i));
     if (index < 0) return announce('この絵の違いは全部見つかっています。');
-    view.hintIndex = index;
+    view.hintIndex = index; rowUsed[gameKey(month, level)] = 0;
     if (view.hint < 2) view.hint++;
     const hint = document.getElementById('hint-line');
     hint.textContent = view.hint === 1 ? `${regionName(spotCenter(spots(month, level)[index]))}を探してみてね。` : '青い輪の近くを見てみてね。輪を見ても発見数は増えません。';
-    if (view.hint >= 2 && pictureZoom.scale > 1) resetPictureInteraction();
+    if (view.hint >= 2 && pictureZoom.scale > 1) {
+      const c = spotCenter(spots(month, level)[index]), scale = pictureZoom.scale;
+      glideZoom({scale, x: .5 - c.x * scale, y: .5 - c.y * scale});
+    }
     refreshMarkers();
   }
   function refreshMarkers() {
@@ -616,7 +696,7 @@
     showConfirm('答えを表示しますか？', '表示だけでは発見数やクリア記録は増えません。', '答えを表示する', () => {
       view.revealed = true; helpUsed.add(gameKey(selectedMonth(), view.level));
       if (pictureZoom.scale > 1) resetPictureInteraction();
-      document.getElementById('hint-line').textContent = '答えを表示中です。輪を押すとクリアできます（金のスタンプはつきません）。';
+      document.getElementById('hint-line').textContent = '答えを表示中。輪を押すとクリアできます（金はつきません）。';
       refreshMarkers();
     });
   }
@@ -633,7 +713,8 @@
     actions.push('<button data-action="home">月選びへ</button>');
     setScreen('clear', `<section class="clear-screen"><p>カギしっぽバスケ部</p><h2>${safeText(titleOf(month))}　クリア！</h2>
       <p>${levelName[level]}の違いを全部見つけたよ。</p>
-      ${lastClearGold ? `<p class="gold-line">2分以内！${level === 'normal' ? '　金のスタンプ' : '　すばやい！'}</p>` : ''}
+      ${lastClearPerfect ? '<p class="perfect-line">ひと目で全部</p>' : ''}
+      ${lastClearGold ? `<p class="gold-line">2分以内！${level === 'normal' ? '　金のスタンプ' : '　すばやい！'}</p>` : lastClearLate && level === 'normal' ? '<p class="late-line">はずれ3回までなら、金のスタンプ</p>' : ''}
       ${level === 'normal' ? passportHTML(month.id, grand) : ''}
       ${level === 'hard' && cornOf(month) ? `<p class="corn-line">${state.corn?.[month.id] ? 'この月のトウモロコシも見つけた！' : 'この絵には、トウモロコシも1本かくれているよ。'}　${cornCount()} / ${cornTotal()}</p>` : ''}
       ${art ? `<div class="clear-art">${art}</div>` : ''}
@@ -763,12 +844,14 @@
     }
     return best;
   }
+  // スマホは 2倍で探すので、指のゆとりを 12px に（10/31 BJ さん「適当に押しただけでクリアできる」）。iPad は 22 のまま
+  function fingerPad(pointerType) { return pointerType === 'mouse' ? 11 : matchMedia(PHONE).matches ? 12 : 22; }
   function hitScore(spot, x, y, width, height, sourceWidth, sourceHeight, pointerType) {
     // Actual difference cells come first. In particular, never use a broad
     // bounding ellipse for a long, sparse change such as footprints.
     if (Array.isArray(spot.cells) && spot.cells.length && Number.isFinite(sourceWidth) && Number.isFinite(sourceHeight)) {
       const grid = Number(spot.grid) > 0 ? Number(spot.grid) : 8;
-      const pad = pointerType === 'mouse' ? 11 : 22; // screen pixels, not source pixels
+      const pad = fingerPad(pointerType); // screen pixels, not source pixels
       const px = x * width, py = y * height;
       let nearest = Infinity;
       for (const cell of spot.cells) {
@@ -783,16 +866,20 @@
         if (distance < nearest) nearest = distance;
         if (nearest === 0) break;
       }
-      return nearest <= pad ? nearest / pad : Infinity;
+      if (nearest <= pad) return nearest / pad;
+      // 形が変わった物は縁だけが違いのます目になる（2月の青い鉢）。ゆとりを細くしたので、縁にかこまれた中も当たりにする
+      const col = Math.floor(px / width * sourceWidth / grid), row = Math.floor(py / height * sourceHeight / grid);
+      const line = spot.cells.filter(c => c[1] === row).map(c => c[0]), down = spot.cells.filter(c => c[0] === col).map(c => c[1]);
+      return line.some(c => c < col) && line.some(c => c > col) && down.some(c => c < row) && down.some(c => c > row) ? .99 : Infinity;
     }
     const polys = polygonsOf(spot);
     if (polys.length) {
       if (polys.some(p => insidePolygon(x, y, p))) return 0;
       const dist = Math.min(...polys.map(p => edgeDistance(x*width, y*height, p, width, height)));
-      const pad = pointerType === 'mouse' ? 11 : 22;
+      const pad = fingerPad(pointerType);
       return dist <= pad ? dist / pad : Infinity;
     }
-    const pad = pointerType === 'mouse' ? 11 : 22;
+    const pad = fingerPad(pointerType);
     const c = spotCenter(spot), rx = Math.max(pad, clamped(spot.rx || .02)*width), ry = Math.max(pad, clamped(spot.ry || .02)*height);
     const value = Math.hypot((x-c.x)*width/rx, (y-c.y)*height/ry);
     return value <= 1 ? value : Infinity;
@@ -816,7 +903,7 @@
   function cornTap(month, level, x, y, width, pointerType) {
     const c = level === 'hard' ? cornOf(month) : null;
     if (!c) return false;
-    const pad = pointerType === 'mouse' ? 11 : 22;
+    const pad = fingerPad(pointerType);
     if (Math.hypot(x - c.x, (y - c.y) * (month.height || 1080) / (month.width || 1440)) * width > c.r * width + pad) return false;
     if (state.corn?.[month.id]) { announce('そのトウモロコシは、もう見つけたよ。'); return true; }
     state.corn ||= {}; state.corn[month.id] = true; saveState();
@@ -895,31 +982,45 @@
     if (!month) return;
     const rect = stage.getBoundingClientRect();
     if (!rect.width || !rect.height) return;
+    if (restUntil) return;
     const point = sourcePicturePoint({x: (clientX-rect.left)/rect.width, y: (clientY-rect.top)/rect.height}, pictureZoom);
     if (!point) return;
-    const {x, y} = point;
+    const {x, y} = point, key = gameKey(month, level);
+    lastTapMissed = false;
     const choice = pickSpot(month, level, x, y, rect.width*pictureZoom.scale, rect.height*pictureZoom.scale, pointerType);
     if (choice.kind === 'duplicate') return announce('そこはもう見つけたよ。');
     if (choice.kind === 'ambiguous') return announce('近くに違いが重なっています。少し場所を変えて押してね。');
-    if (choice.kind === 'none') return cornTap(month, level, x, y, rect.width*pictureZoom.scale, pointerType) || wrongTap(stage, x, y);
+    if (choice.kind === 'none') {
+      if (cornTap(month, level, x, y, rect.width*pictureZoom.scale, pointerType)) return;
+      wrongTap(stage, x, y);
+      if (view.revealed) return;
+      lastTapMissed = true; missUsed[key] = (missUsed[key] || 0) + 1; rowUsed[key] = 0;
+      if (++missRow >= REST_AFTER) startRest();
+      return;
+    }
     const i = choice.i;
     const found = foundSet(month, level); found.add(i);
     state.found[gameKey(month, level)] = [...found].sort((a,b) => a-b);
     saveState();
     view.hint = 0; view.hintIndex = null;
+    missRow = 0; const row = rowUsed[key] = (rowUsed[key] || 0) + 1;
     justFound = i; refreshMarkers(); justFound = null;
     const counter = document.getElementById('found-count');
     counter.textContent = `${found.size} / ${spots(month, level).length} 発見`;
     counter.classList.remove('bump'); void counter.offsetWidth; counter.classList.add('bump');
-    document.getElementById('hint-line').textContent = found.size === spots(month, level).length ? '全部見つけた！' : '見つけた！　次の違いを探そう。';
     const complete = found.size >= spots(month, level).length;
+    lastClearPerfect = complete && row >= spots(month, level).length;
+    document.getElementById('hint-line').textContent = lastClearPerfect ? 'ひと目で全部！' : complete ? '全部見つけた！' : row >= 2 ? `はずさず ${row}つ！` : '見つけた！　次の違いを探そう。';
     if (complete) { state.cleared ||= {}; state.cleared[gameKey(month, level)] = true; saveState(); }
-    updateOverall(); foundSound(complete);
+    updateOverall(); foundSound(complete, lastClearPerfect ? 5 : row);
     if (complete) {
-      lastClearGold = Boolean(playTimer && !playTimer.over && !helpUsed.has(gameKey(month, level)) && timerLeft() > 0);
+      const inTime = Boolean(playTimer && !playTimer.over && !helpUsed.has(key) && timerLeft() > 0);
+      lastClearGold = inTime && (missUsed[key] || 0) <= GOLD_MISSES;
+      lastClearLate = inTime && !lastClearGold;
       stopTimer();
       if (lastClearGold && level === 'normal') { state.gold ||= {}; state.gold[gameKey(month, level)] = true; saveState(); }
     }
+    if (complete && pictureZoom.scale > 1) glideZoom({scale: 1, x: 0, y: 0});
     const wait = complete ? celebrate(month) : 0;
     if (complete) setTimeout(() => {
       if (view.screen === 'play' && view.month === month.id && view.level === level) renderClear(month, level);
@@ -928,6 +1029,9 @@
 
   main.addEventListener('pointerdown', event => {
     if (event.pointerType === 'touch') return;
+    const mini = event.target.closest('.mini');
+    if (mini) { pointerDown = null; return miniMove(mini, event.clientX, event.clientY); }
+    clearTimeout(autoZoomTimer);
     const stage = event.target.closest('.picture-stage');
     pointerDown = stage?.classList.contains('ready') ? {stage, x: event.clientX, y: event.clientY, id: event.pointerId} : null;
   });
@@ -936,7 +1040,7 @@
     const down = pointerDown; pointerDown = null;
     if (down.stage !== event.target.closest('.picture-stage')) return;
     if (Math.hypot(event.clientX-down.x, event.clientY-down.y) > 14) return;
-    if (isDoubleTap(down.stage, event.clientX, event.clientY)) return doubleTapZoom(down.stage, event.clientX, event.clientY);
+    if (isDoubleTap(down.stage, event.clientX, event.clientY)) { undoMiss(gameKey(selectedMonth(), view.level)); return doubleTapZoom(down.stage, event.clientX, event.clientY); }
     tapStage(down.stage, event.clientX, event.clientY, event.pointerType);
   });
   main.addEventListener('pointercancel', event => {
@@ -957,9 +1061,9 @@
     }
     if (action === 'reset-zoom') return resetPictureInteraction();
     if (action === 'mag') {
-      if (pictureZoom.scale > 1) return resetPictureInteraction();
-      Object.assign(pictureZoom, limitPictureZoom({scale: 2, x: -.5, y: -.5}));
-      return applyPictureZoom();
+      clearTimeout(autoZoomTimer);
+      wantZoom = pictureZoom.scale === 1;
+      return glideZoom(wantZoom ? {scale: 2, x: -.5, y: -.5} : {scale: 1, x: 0, y: 0});
     }
     if (action === 'home') return renderHome();
     if (action === 'reload') return window.location.reload();
@@ -971,7 +1075,7 @@
     if (action === 'replay') {   // クリアした絵を もう一度（スタンプ・金はそのまま。見つけた数だけ 0 に）
       const m = months().find(x => x.id === button.dataset.id), lv = button.dataset.level;
       if (!m || !LEVELS.includes(lv)) return;
-      delete state.found[gameKey(m, lv)]; delete timerUsed[gameKey(m, lv)]; helpUsed.delete(gameKey(m, lv)); saveState();
+      delete state.found[gameKey(m, lv)]; delete timerUsed[gameKey(m, lv)]; delete missUsed[gameKey(m, lv)]; delete rowUsed[gameKey(m, lv)]; helpUsed.delete(gameKey(m, lv)); saveState();
       return renderPlay(m, lv);
     }
     if (action === 'skip') {
