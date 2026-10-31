@@ -191,7 +191,8 @@
   const poyonSound = () => glideSound(330, 990, 0.16, 'sine', 0.07);
   const tickSound = last => glideSound(last ? 1175 : 880, last ? 1175 : 880, 0.05, 'sine', last ? 0.05 : 0.035);
   // ゆるい制限時間（10/29 BJ さん「2分ぐらいのゆるい感じ」）。切れても終わらない・2分以内のふつうは金のスタンプ・残り30秒で少しあせらせる
-  const TIME_LIMIT = 120;
+  // むずかしいは3分（10/31 BJ さん OK：スマホでは小さい違いが多い）
+  const TIME_LIMIT = {normal: 120, hard: 180};
   let playTimer = null, lastClearGold = false, lastClearLate = false, lastClearPerfect = false;
   // 10/30 はじめての目：答えを見た絵は金なし・出入りしても時間は続きから（「ふつう」を押しなおすと 2:00 にもどり、答えを見ても金が出た）
   const helpUsed = new Set(), timerUsed = {};
@@ -215,11 +216,11 @@
     if (restUntil) { endRest(); missRow = REST_AFTER - 1; }
   }
   function stopTimer() { if (playTimer) clearInterval(playTimer.id); playTimer = null; }
-  function timerLeft() { return playTimer ? Math.max(0, TIME_LIMIT - playTimer.used / 1000) : 0; }
+  function timerLeft() { return playTimer ? Math.max(0, playTimer.limit - playTimer.used / 1000) : 0; }
   function startTimer(key) {
     stopTimer();
     const box = document.getElementById('play-timer'); if (!box) return;
-    playTimer = {key, used: timerUsed[key] || 0, at: performance.now(), said: new Set(), over: false, id: 0};
+    playTimer = {key, limit: TIME_LIMIT[key.split(':')[1]] || TIME_LIMIT.normal, used: timerUsed[key] || 0, at: performance.now(), said: new Set(), over: false, id: 0};
     const tick = () => {
       const now = performance.now();
       if (!document.hidden) playTimer.used += now - playTimer.at;   // 見ていない間は進めない
@@ -227,13 +228,13 @@
       playTimer.at = now;
       const left = timerLeft(), sec = Math.ceil(left);
       box.querySelector('span').textContent = left > 0 ? `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}` : 'のんびり';
-      box.style.setProperty('--p', (left / TIME_LIMIT).toFixed(4));
+      box.style.setProperty('--p', (left / playTimer.limit).toFixed(4));
       box.classList.toggle('hurry', left > 0 && left <= 30);
       if ([30, 10, 5, 4, 3, 2, 1].includes(sec) && left > 0 && !playTimer.said.has(sec)) { playTimer.said.add(sec); tickSound(sec <= 5); }
       if (left <= 0 && !playTimer.over) {
         playTimer.over = true; box.classList.add('over'); clearInterval(playTimer.id);
         const line = document.getElementById('hint-line');
-        if (line) line.textContent = '2分たったよ。でも終わりじゃないよ。のんびり最後まで見つけてね。';
+        if (line) line.textContent = `${playTimer.limit / 60}分たったよ。でも終わりじゃないよ。のんびり最後まで見つけてね。`;
       }
     };
     playTimer.id = setInterval(tick, 200); tick();
@@ -508,7 +509,7 @@
           <button class="${h ? 'done' : ''}" data-action="play" data-id="${safeText(m.id)}" data-level="hard">むずかしい</button></div>
         </div></article>`;
     }).join('');
-    setScreen('home', `<div class="intro"><div><h2>月をえらんでね</h2><p>2枚の絵を見くらべて、ちがうところを押してみよう。<span class="wide-only">1枚2分がめやす。時間が切れても続けられるよ。2分以内・はずれ3回までで ふつうをクリアすると、金のスタンプ。</span></p></div></div>
+    setScreen('home', `<div class="intro"><div><h2>月をえらんでね</h2><p>2枚の絵を見くらべて、ちがうところを押してみよう。<span class="wide-only">ふつうは2分、むずかしいは3分がめやす。時間が切れても続けられるよ。2分以内・はずれ3回までで ふつうをクリアすると、金のスタンプ。</span></p></div></div>
       <div class="home-passport">${passportHTML()}</div>${cornHomeHTML()}<div class="month-grid">${cards}</div>
       <div class="home-bottom"><button data-action="sound" aria-pressed="${soundEnabled}">${soundEnabled ? '音あり' : '音なし'}</button>${allNormalDone() ? '<button class="primary" data-action="ending">エンディングを見る</button>' : '<span class="explain">手帳のスタンプが12個そろうと、エンディングがひらきます。</span>'}
         <button class="danger" data-action="reset">進み具合をリセット</button></div>${characterGuideHTML()}`);
@@ -619,7 +620,7 @@
         ${matchMedia(PHONE).matches ? miniHTML(month) : ''}
         <button class="zoom-reset" id="zoom-reset" data-action="reset-zoom" aria-label="2枚の絵を元の大きさに戻す" disabled>元の大きさ</button>
         <div class="count" id="found-count" aria-live="polite">${count} / ${total}<span class="wide-only"> 発見</span></div>
-        ${total && count < total ? '<div class="play-timer" id="play-timer" aria-label="のこり時間（切れても続けられます）" style="--p:1"><i></i><span>2:00</span></div>' : ''}
+        ${total && count < total ? '<div class="play-timer" id="play-timer" aria-label="のこり時間（切れても続けられます）" style="--p:1"><i></i><span>' + TIME_LIMIT[level] / 60 + ':00</span></div>' : ''}
       </div>
       <div class="play-dock">
         <div class="play-toolbar" aria-label="ゲームの操作">
@@ -718,7 +719,7 @@
     setScreen('clear', `<section class="clear-screen"><p>カギしっぽバスケ部</p><h2>${safeText(titleOf(month))}　クリア！</h2>
       <p>${levelName[level]}の違いを全部見つけたよ。</p>
       ${lastClearPerfect ? '<p class="perfect-line">ひと目で全部</p>' : ''}
-      ${lastClearGold ? `<p class="gold-line">2分以内！${level === 'normal' ? '　金のスタンプ' : '　すばやい！'}</p>` : lastClearLate && level === 'normal' ? '<p class="late-line">はずれ3回までなら、金のスタンプ</p>' : ''}
+      ${lastClearGold ? `<p class="gold-line">${TIME_LIMIT[level] / 60}分以内！${level === 'normal' ? '　金のスタンプ' : '　すばやい！'}</p>` : lastClearLate && level === 'normal' ? '<p class="late-line">はずれ3回までなら、金のスタンプ</p>' : ''}
       ${level === 'normal' ? passportHTML(month.id, grand) : ''}
       ${level === 'hard' && cornOf(month) ? `<p class="corn-line">${state.corn?.[month.id] ? 'この月のトウモロコシも見つけた！' : 'この絵には、トウモロコシも1本かくれているよ。'}　${cornCount()} / ${cornTotal()}</p>` : ''}
       ${art ? `<div class="clear-art">${art}</div>` : ''}
