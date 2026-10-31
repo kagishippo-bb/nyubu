@@ -99,12 +99,23 @@
   let touchBlockedUntilLift = false;
   let safariGestureOwned = false;
   let fitFrame = 0;
+  const PHONE = '(max-width: 699px), (max-height: 500px)';
   // Keep both complete 4:3 pictures within the current portrait viewport.
   // Measure the actual controls instead of assuming an iPad-sized header.
   function fitPicturePair() {
     if (view.screen !== 'play') return;
     const grid = main.querySelector('.picture-grid');
     if (!grid) return;
+    // スマホ（10/31 BJ さんの iPhone SE「ちっちゃすぎて、マジで無理」）：上の列と下の列の残りを絵に全部あげる
+    if (matchMedia(PHONE).matches) {
+      const height = window.visualViewport?.height || window.innerHeight;
+      document.documentElement.style.setProperty('--vh', `${height}px`);
+      const bars = main.querySelector('.play-top').offsetHeight + main.querySelector('.play-dock').offsetHeight;
+      const free = height - bars - 2;
+      const byHeight = matchMedia('(orientation: landscape)').matches ? free * 8 / 3 + 2 : (free - 2) * 2 / 3;
+      grid.style.width = `${Math.floor(Math.max(80, Math.min(main.clientWidth, byHeight)))}px`;
+      return;
+    }
     if (matchMedia('(min-width: 700px) and (orientation: landscape)').matches) {
       grid.style.removeProperty('width');
       return;
@@ -204,6 +215,10 @@
     main.querySelectorAll('.picture-stage').forEach(stage => stage.classList.toggle('zoomed', pictureZoom.scale > 1));
     const reset = document.getElementById('zoom-reset');
     if (reset) reset.disabled = pictureZoom.scale === 1;
+    const mag = document.getElementById('zoom-mag');
+    if (mag) mag.textContent = pictureZoom.scale > 1 ? '🔍全体' : '🔍2倍';
+    const z = pictureZoom;
+    main.querySelectorAll('.mini b').forEach(box => { box.style.cssText = `left:${-z.x / z.scale * 100}%;top:${-z.y / z.scale * 100}%;width:${100 / z.scale}%;height:${100 / z.scale}%`; });
   }
   function resetPictureInteraction() {
     if (touchGesture.active) touchBlockedUntilLift = true;
@@ -421,8 +436,8 @@
           <button class="${h ? 'done' : ''}" data-action="play" data-id="${safeText(m.id)}" data-level="hard">むずかしい</button></div>
         </div></article>`;
     }).join('');
-    setScreen('home', `<div class="intro"><div><h2>月をえらんでね</h2><p>2枚の絵を見くらべて、ちがうところを押してみよう。1枚2分がめやす。時間が切れても続けられるよ。2分以内にふつうをクリアすると、金のスタンプ。</p></div></div>
-      ${passportHTML()}${cornHomeHTML()}<div class="month-grid">${cards}</div>
+    setScreen('home', `<div class="intro"><div><h2>月をえらんでね</h2><p>2枚の絵を見くらべて、ちがうところを押してみよう。<span class="wide-only">1枚2分がめやす。時間が切れても続けられるよ。2分以内にふつうをクリアすると、金のスタンプ。</span></p></div></div>
+      <div class="home-passport">${passportHTML()}</div>${cornHomeHTML()}<div class="month-grid">${cards}</div>
       <div class="home-bottom"><button data-action="sound" aria-pressed="${soundEnabled}">${soundEnabled ? '音あり' : '音なし'}</button>${allNormalDone() ? '<button class="primary" data-action="ending">エンディングを見る</button>' : '<span class="explain">手帳のスタンプが12個そろうと、エンディングがひらきます。</span>'}
         <button class="danger" data-action="reset">進み具合をリセット</button></div>${characterGuideHTML()}`);
   }
@@ -501,6 +516,7 @@
     const heading = `<h3>${original ? 'もとの絵' : 'ちがうところを探す絵'}</h3>`;
     return `<section class="picture-panel">${heading}
       <div class="picture-stage loading" data-side="${side}" data-panel="${original ? 'reference' : 'comparison'}" aria-label="${original ? 'もとの絵' : 'ちがいのある絵'}。指やマウスで場所を押せます。">
+        ${original ? `<div class="mini" aria-hidden="true" style="background-image:url('${safeText(month.thumbnail || month.original)}')"><b></b></div>` : ''}
         <div class="picture-content"><img src="${safeText(src)}" width="${Number(month.width) || 1440}" height="${Number(month.height) || 1080}" alt="${safeText(titleOf(month))}・${original ? 'もとの絵' : levelName[level]}" draggable="false">
         <div class="marker-layer" data-markers="${side}">${markerHTML(month, level, side)}</div></div>
         <div class="picture-loading" role="status">絵を読み込んでいます…</div>
@@ -521,7 +537,9 @@
     if (!month || !LEVELS.includes(level)) return renderHome();
     view.month = month.id; view.level = level; view.hint = 0; view.revealed = false; view.hintIndex = null;
     const count = foundSet(month, level).size, total = spots(month, level).length;
+    const other = level === 'normal' ? 'hard' : 'normal';
     setScreen('play', `<div class="play-top">
+        <button class="phone-only play-quit" data-action="home" aria-label="月選びへ戻る">終了</button>
         <div class="play-heading"><h2>${safeText(titleOf(month))}</h2><div class="sub">${levelName[level]}｜どちらの絵も押せます</div></div>
         <button class="zoom-reset" id="zoom-reset" data-action="reset-zoom" aria-label="2枚の絵を元の大きさに戻す" disabled>元の大きさ</button>
         <div class="count" id="found-count" aria-live="polite">${count} / ${total} 発見</div>
@@ -529,23 +547,39 @@
       </div>
       <div class="play-dock">
         <div class="play-toolbar" aria-label="ゲームの操作">
-          <button data-action="home" aria-label="月選びへ戻る">終了</button>
-          <button data-action="switch" data-level="normal" class="${level === 'normal' ? 'active' : ''}">ふつう</button>
-          <button data-action="switch" data-level="hard" class="${level === 'hard' ? 'active' : ''}">むずかしい</button>
+          <button class="wide-only" data-action="home" aria-label="月選びへ戻る">終了</button>
+          <button data-action="switch" data-level="normal" class="wide-only ${level === 'normal' ? 'active' : ''}">ふつう</button>
+          <button data-action="switch" data-level="hard" class="wide-only ${level === 'hard' ? 'active' : ''}">むずかしい</button>
+          <button class="phone-only level-swap" data-action="switch" data-level="${other}" aria-label="${levelName[other]}に切りかえる"><small>いま ${levelName[level]}</small>${levelName[other]}へ</button>
+          <button class="phone-only" id="zoom-mag" data-action="mag" aria-label="2枚の絵を大きくする、全体にもどす">🔍2倍</button>
           <button data-action="hint">ヒント</button>
           <button data-action="answer">答えを見る</button>
           <button data-action="skip" aria-label="次へ進む。発見記録は増えません">次へ</button>
         </div>
-        <div class="hint-line" id="hint-line" role="status" aria-live="polite">${!total ? 'この月の違いは準備中です。' : level === 'hard' && cornOf(month) && !state.corn?.[month.id] ? '違うところを押してね。トウモロコシも1本かくれているよ。' : '違うところを押してね。2回たたくか、2本指で広げると拡大します。'}</div>
+        <div class="hint-line" id="hint-line" role="status" aria-live="polite">${!total ? 'この月の違いは準備中です。' : level === 'hard' && cornOf(month) && !state.corn?.[month.id] ? '違うところを押してね。トウモロコシも1本かくれているよ。' : matchMedia(PHONE).matches ? '違うところを押してね。🔍で2倍になるよ。' : '違うところを押してね。2回たたくか、2本指で広げると拡大します。'}</div>
       </div>
       <div class="picture-grid">${picturePanel(month, level, 'original')}${picturePanel(month, level, 'changed')}</div>
       <p class="play-note">間違えて押しても減点はありません。ヒントや答えでは発見数は増えません。拡大中は1本指で絵を動かせます。</p>${characterGuideHTML()}`);
     preparePictureLoads();
+    fitPicturePair();
     schedulePictureFit();
+    watchHintLine();
     preloadNext(month, level);
     lastClearGold = false;
     if (total && count < total) startTimer(gameKey(month, level));
     if (total && count === total) setTimeout(() => { if (view.screen === 'play' && view.month === month.id && view.level === level) renderClear(month, level); }, 200);
+  }
+  // スマホでは文の列をやめて、変わったときだけ札で出す（絵の場所をあけるため）
+  let hintTimer = 0;
+  function watchHintLine() {
+    const line = document.getElementById('hint-line');
+    const show = () => {
+      line.classList.add('show');
+      clearTimeout(hintTimer);
+      hintTimer = setTimeout(() => line.classList.remove('show'), 3500);
+    };
+    new MutationObserver(show).observe(line, {childList: true, characterData: true, subtree: true});
+    show();
   }
   const preloaded = new Set();
   function preloadNext(month, level) {
@@ -570,6 +604,7 @@
     if (view.hint < 2) view.hint++;
     const hint = document.getElementById('hint-line');
     hint.textContent = view.hint === 1 ? `${regionName(spotCenter(spots(month, level)[index]))}を探してみてね。` : '青い輪の近くを見てみてね。輪を見ても発見数は増えません。';
+    if (view.hint >= 2 && pictureZoom.scale > 1) resetPictureInteraction();
     refreshMarkers();
   }
   function refreshMarkers() {
@@ -580,6 +615,7 @@
     if (view.revealed) return;
     showConfirm('答えを表示しますか？', '表示だけでは発見数やクリア記録は増えません。', '答えを表示する', () => {
       view.revealed = true; helpUsed.add(gameKey(selectedMonth(), view.level));
+      if (pictureZoom.scale > 1) resetPictureInteraction();
       document.getElementById('hint-line').textContent = '答えを表示中です。輪を押すとクリアできます（金のスタンプはつきません）。';
       refreshMarkers();
     });
@@ -920,6 +956,11 @@
       return;
     }
     if (action === 'reset-zoom') return resetPictureInteraction();
+    if (action === 'mag') {
+      if (pictureZoom.scale > 1) return resetPictureInteraction();
+      Object.assign(pictureZoom, limitPictureZoom({scale: 2, x: -.5, y: -.5}));
+      return applyPictureZoom();
+    }
     if (action === 'home') return renderHome();
     if (action === 'reload') return window.location.reload();
     if (action === 'cat-name') return showCharacterName(button.dataset.id);
