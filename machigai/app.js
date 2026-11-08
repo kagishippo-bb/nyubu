@@ -1014,7 +1014,7 @@
     counter.firstChild.textContent = `${found.size} / ${spots(month, level).length}`;
     counter.classList.remove('bump'); void counter.offsetWidth; counter.classList.add('bump');
     const complete = found.size >= spots(month, level).length;
-    lastClearPerfect = complete && row >= spots(month, level).length;
+    lastClearPerfect = complete && !view.revealed && !helpUsed.has(key) && row >= spots(month, level).length;
     document.getElementById('hint-line').textContent = lastClearPerfect ? 'ひと目で全部！' : complete ? '全部見つけた！' : row >= 2 ? `はずさず ${row}つ！` : '見つけた！　次の違いを探そう。';
     if (complete) { state.cleared ||= {}; state.cleared[gameKey(month, level)] = true; saveState(); }
     updateOverall(); foundSound(complete, lastClearPerfect ? 5 : row);
