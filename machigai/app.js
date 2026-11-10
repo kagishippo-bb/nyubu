@@ -810,7 +810,18 @@
     const art = ending.background || ending.foreground ? stationArtwork(ending, shown) : '<p class="missing">駅の絵は準備中です。</p>';
     setScreen('stations', `<section class="station-screen"><h2>${safeText(ending.stationName || '流れ星駅')}</h2>
       <p>${safeText(date)}に遊んだときの駅です。</p>${art}
+      ${lineHTML()}
       ${bonusLine()}<div class="next-actions">${allHardDone() && bonusSrc() ? '<button class="primary" data-action="bonus">おまけの一場面</button>' : ''}<button data-action="ending">動画をもう一度</button><button data-action="home">月選びへ</button></div></section>`);
+  }
+  // エンディングのあと：LINE スタンプの入口（11/10 BJ さん OK・LINEスタンプ部 イロハ部長の案）
+  function lineHTML() {
+    const btn = (url, name, imgs) => `<a class="line-btn" href="${url}" target="_blank" rel="noopener">
+        <span class="line-stamps">${imgs.map(([src, alt]) => `<img src="assets/line/${src}" alt="${alt}" loading="lazy" draggable="false">`).join('')}</span>
+        <span class="line-name">${name}</span></a>`;
+    return `<section class="line-box" aria-label="LINE スタンプ"><h3>いまのスタンプ、LINE で使えます</h3>
+      <div class="line-btns">${btn('https://store.line.me/stickershop/product/37754715/ja', 'ねこのドラとタマ（カギしっぽバスケ部）', [['1_imaiku.png', 'いま行く！'], ['4_een.png', 'えーん']])}
+      ${btn('https://store.line.me/stickershop/product/37754695/ja', 'ねこのドラとタマ 本音編', [['2_iidesune.png', 'いいですね（何の話？）'], ['3_moushiwake.png', '申し訳ありません（おいしかったです）']])}</div>
+      <p class="line-note">LINE STORE のページがひらきます</p></section>`;
   }
   function bonusSrc() { return data.ending?.bonus || 'assets/ending/bonus_akegata.png'; }
   function bonusLine() {

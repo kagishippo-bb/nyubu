@@ -359,3 +359,14 @@ main.play-view { max-width: none; padding: 2px 2px 12px; }
   .play-top.zoomed .mini { visibility: visible; }
   body.playing .play-timer { min-width: 3.1rem; padding-inline: 5px; }
 }
+
+/* エンディングのあと：LINE スタンプの入口（11/10） */
+.line-box { margin: 1.1rem auto .4rem; padding: .9rem .8rem 1rem; border: 2px solid #06c755; border-radius: 18px; background: #fff; max-width: 640px; }
+.line-box h3 { margin: 0 0 .7rem; font-size: clamp(1.05rem, 2.6vw, 1.3rem); }
+.line-btns { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .7rem; }
+.line-btn { display: flex; flex-direction: column; align-items: center; gap: .35rem; padding: .6rem .5rem .75rem; border-radius: 14px; background: #f3fbf5; border: 1px solid #b9e8c8; color: inherit; text-decoration: none; }
+.line-btn:active { transform: scale(.98); }
+.line-stamps { display: flex; justify-content: center; gap: .4rem; }
+.line-stamps img { width: min(120px, 34vw); height: auto; }
+.line-name { display: block; width: 100%; padding: .55rem .4rem; border-radius: 999px; background: #06c755; color: #fff; font-weight: 700; font-size: .9rem; line-height: 1.35; text-wrap: balance; word-break: keep-all; }
+.line-note { margin: .6rem 0 0; font-size: .82rem; color: #6b5a4a; }
