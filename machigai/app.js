@@ -199,12 +199,20 @@
   // 10/31 BJ さん OK：3回つづけてはずれたら2秒押せない・金は「はずれ3回まで」・はずさず全部で「ひと目で全部」
   const missUsed = {}, rowUsed = {}, GOLD_MISSES = 3, REST_AFTER = 3, REST_MS = 2000;
   let missRow = 0, restUntil = 0, restTimer = 0, lastTapMissed = false;
-  function endRest() { clearTimeout(restTimer); restUntil = 0; main.querySelector('.picture-grid')?.classList.remove('resting'); }
+  function endRest() { clearTimeout(restTimer); restUntil = 0; main.querySelector('.picture-grid')?.classList.remove('resting'); document.getElementById('rest-note')?.remove(); }
   function startRest() {
     missRow = 0; restUntil = performance.now() + REST_MS;
     main.querySelector('.picture-grid')?.classList.add('resting');
     const line = document.getElementById('hint-line');
-    if (line) line.textContent = '3回はずれ。2秒 休けい。よく見てね。';
+    if (line) line.textContent = '3回はずれ。少し待ってね（2秒）。';
+    // 11/22 BJ さん：2秒止まるのが壊れたように見えないよう、画面のまん中に字を出す（スマホは案内の行が見えないため）
+    if (!document.getElementById('rest-note')) {
+      const note = document.createElement('div');
+      note.id = 'rest-note'; note.setAttribute('role', 'status');
+      note.textContent = '3回はずれたので、少し待ってね…（2秒）';
+      note.style.cssText = 'position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:50;padding:.7rem 1.1rem;background:rgba(255,249,232,.96);color:#5c512f;border:2px solid #ecdab0;border-radius:14px;font-weight:700;font-size:1rem;box-shadow:0 4px 14px rgba(0,0,0,.18);pointer-events:none;white-space:nowrap;';
+      document.body.appendChild(note);
+    }
     restTimer = setTimeout(endRest, REST_MS);
   }
   // 2回たたいて拡大するときの1回目は、はずれに数えない
@@ -860,8 +868,9 @@
     }
     return best;
   }
-  // スマホは 2倍で探すので、指のゆとりを 12px に（10/31 BJ さん「適当に押しただけでクリアできる」）。iPad は 22 のまま
-  function fingerPad(pointerType) { return pointerType === 'mouse' ? 11 : matchMedia(PHONE).matches ? 12 : 22; }
+  // 11/22 BJ さん OK「広げて」：タダシ（Muse）の試しでスマホの指が当たらない（6月の太鼓・8月の左目・9月の傘の柄）。
+  // スマホも指1本の半分（22px）のゆとりに。マウスは 14。違いどうしが近いときは pickSpot が近い方を選ぶ
+  function fingerPad(pointerType) { return pointerType === 'mouse' ? 14 : 22; }
   function hitScore(spot, x, y, width, height, sourceWidth, sourceHeight, pointerType) {
     // Actual difference cells come first. In particular, never use a broad
     // bounding ellipse for a long, sparse change such as footprints.
@@ -913,7 +922,9 @@
     if (!candidates.length) return {kind: 'none'};
     // 近くに2つ重なるときは、まだ見つけていない方をあげる（10/29 間違い探し部門）。
     const open = candidates.find(c => !found.has(c.i));
-    if (open && (!found.has(candidates[0].i) || open.score - candidates[0].score < .08)) return {kind: 'new', i: open.i};
+    // 11/22：ゆとりを広げたので、見つけた違いの「まわり」を押しても、ゆとりの中にまだの違いがあればそちらをあげる
+    // （見つけた違いそのものの上＝score 0 は上で「もう見つけた」）
+    if (open) return {kind: 'new', i: open.i};
     return {kind: 'duplicate'};
   }
   function cornTap(month, level, x, y, width, pointerType) {
