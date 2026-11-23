@@ -904,6 +904,8 @@
         cat.vy = lv.vy;
         cat.spin = cat.vx * 0.0016;
         cat.state = "flying";
+        // 11/23 BJ さんのバグ報告：残り10秒のうちに投げた猫は、時間切れの後に入っても2倍
+        cat.lastTen = state === "playing" && !timeUp && timeLeft <= 10;
         cat.flyTime = 0; cat.settleTime = 0;
         playWhoosh(lv.ratio);
       }
@@ -1106,7 +1108,7 @@
         comboPop = 1;
         // 点数：特別なカギしっぽのドラは500点。クリーン（リング・ボードに
         // ふれず）で2倍、ラスト10秒で2倍（両方なら4倍）
-        var inLast = state === "playing" && !timeUp && timeLeft <= 10;
+        var inLast = !!cat.lastTen || (state === "playing" && !timeUp && timeLeft <= 10);
         var clean = !cat.hitRim && !cat.hitBoard;
         var pts = cat.special ? 500 : cat.def.score;
         if (clean) pts *= 2;
