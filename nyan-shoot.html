@@ -26,6 +26,18 @@
   main { flex: 1 1 auto; min-height: 0; position: relative; }
   footer { flex: 0 0 auto; text-align: center; padding: 7px 12px 9px; background: #f3e6d6; }
   footer p { font-size: 11.5px; color: #7a5a3e; margin: 0; line-height: 1.5; }
+
+  /* 11/23 BJ さん「iPhone だとちょっと小さく見える」：スマホでは上と下をつめて、ゲームを大きく */
+  @media (max-width: 600px) {
+    header { padding: 4px 8px 3px; }
+    header .club, header .how { display: none; }
+    header h1 { font-size: 17px; margin: 0 6px 0 0; display: inline; vertical-align: middle; }
+    header .free { display: inline; font-size: 11px; margin: 0; vertical-align: middle; }
+    header .free span { padding: 0 7px; }
+    header .wall { font-size: 11.5px; margin: 2px 0 0; }
+    footer { padding: 3px 8px 4px; }
+    footer p { font-size: 10px; line-height: 1.35; }
+  }
 </style>
 <style>
       :root {
