@@ -205,6 +205,8 @@
         -webkit-overflow-scrolling: touch;
       }
       #endCard {
+        position: relative;
+        z-index: 2;
         background: var(--panel);
         color: var(--ink);
         border-radius: 18px;
@@ -331,6 +333,7 @@
         pointer-events: none;
       }
       #facePeek {
+        z-index: 1;
         position: absolute;
         left: 0;
         top: 0;
@@ -873,15 +876,15 @@
         facePeek.innerHTML = "";
         var keys = all ? CAT_KEYS : ["dora", "tama", "mike"];
         var spots = [
-          { left: "-14px", top: "12%" }, { right: "-14px", top: "30%" },
-          { left: "-14px", bottom: "16%" }, { right: "-14px", bottom: "6%" },
-          { left: "6%", top: "-16px" }, { right: "8%", top: "-16px" }
+          { left: "3%", top: "-20px" }, { right: "5%", top: "-20px" },
+          { left: "-38px", top: "36%" }, { right: "-38px", top: "50%" },
+          { left: "8%", bottom: "-20px" }, { right: "12%", bottom: "-20px" }
         ];
         keys.forEach(function (k, i) {
           var img = document.createElement("img");
           img.src = CATS[k].img;
           img.alt = "";
-          var size = 74 + (i % 3) * 10;
+          var size = 68 + (i % 3) * 8;
           img.style.width = size + "px";
           img.style.height = size + "px";
           var spot = spots[i % spots.length];
