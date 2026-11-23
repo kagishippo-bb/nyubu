@@ -299,6 +299,56 @@
         cursor: pointer;
       }
       #againBtn:active { transform: scale(0.96); }
+      #shareBtn {
+        font-family: inherit;
+        display: block;
+        margin: 10px auto 0;
+        font-size: clamp(15px, 4.6vw, 19px);
+        font-size: clamp(15px, 4.4cqw, 19px);
+        font-weight: 800;
+        background: #fff;
+        color: var(--ink);
+        border: 2px solid var(--ink);
+        border-radius: 999px;
+        padding: 9px 26px;
+        min-height: 48px;
+        cursor: pointer;
+      }
+      #shareBtn:active { transform: scale(0.96); }
+      #endCard .feedback {
+        font-size: clamp(12px, 3.6vw, 14px);
+        font-size: clamp(12px, 3.4cqw, 14px);
+        line-height: 1.6;
+        opacity: 0.75;
+        margin: 10px 0 0;
+      }
+      #confettiCanvas {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+      #facePeek {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+        display: none;
+      }
+      #facePeek img {
+        position: absolute;
+        border-radius: 50%;
+        animation: peekBob 1.6s ease-in-out infinite;
+      }
+      @keyframes peekBob {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+      }
       #muteBtn {
         position: absolute;
         top: 11%;
@@ -357,6 +407,8 @@
           <span class="tap">タップで はじめる</span>
         </div>
         <div class="overlay" id="endScreen">
+          <canvas id="confettiCanvas" width="720" height="1080"></canvas>
+          <div id="facePeek"></div>
           <div id="endCard">
             <p class="date" id="endDate"></p>
             <h2>きょうのシュート</h2>
@@ -366,7 +418,9 @@
             <p class="plays" id="endPlays"></p>
             <p class="cats" id="endCats"></p>
             <button id="againBtn" type="button">もう一度</button>
+            <button id="shareBtn" type="button">結果をシェア</button>
             <p class="club">カギしっぽバスケ部</p>
+            <p class="feedback">遊んだ感想や、こうしたらもっと楽しい、を教えてください。次の直しの参考にさせてもらいます</p>
           </div>
         </div>
       </div>
@@ -393,6 +447,9 @@
       var endCats = document.getElementById("endCats");
       var endPlays = document.getElementById("endPlays");
       var againBtn = document.getElementById("againBtn");
+      var shareBtn = document.getElementById("shareBtn");
+      var confettiCanvas = document.getElementById("confettiCanvas");
+      var facePeek = document.getElementById("facePeek");
       var startBest = document.getElementById("startBest");
       var startPlays = document.getElementById("startPlays");
 
@@ -585,10 +642,17 @@
       var niceT = 0, niceKey = "mike"; // 「ナイスシュート！」表示の残り時間と顔を出す部員
       var lastSpurtT = 0;  // 「ラスト！」表示の残り時間
       var wasLastSpurt = false;
-      // つぎの猫を決める：約8回に1回は特別な「カギしっぽのドラ」
+      // つぎの猫を決める：約8回に1回は特別な「カギしっぽのドラ」、
+      // 50回に1回は本当にレアな「カギしっぽのタマ」
+      var nextSpecialKind = "dora"; // 特別な猫の種類（"dora" | "tama"）
       function pickNext() {
-        if (Math.random() < 0.125) { nextKey = "dora"; nextSpecial = true; }
-        else { nextKey = pickCat(); nextSpecial = false; }
+        var r = Math.random();
+        if (r < 0.02) { nextKey = "tama"; nextSpecial = true; nextSpecialKind = "tama"; }
+        else if (r < 0.145) { nextKey = "dora"; nextSpecial = true; nextSpecialKind = "dora"; }
+        else { nextKey = pickCat(); nextSpecial = false; nextSpecialKind = "dora"; }
+      }
+      function specialName(kind) {
+        return kind === "tama" ? "カギしっぽのタマ" : "カギしっぽのドラ";
       }
       var score = 0, goals = 0, combo = 0, bestCombo = 0;
       var scoredList = [];
@@ -606,10 +670,11 @@
       function spawnCat() {
         var key = nextKey;
         var special = nextSpecial;
+        var specialKind = nextSpecialKind;
         pickNext();
         var def = CATS[key];
         cat = {
-          key: key, def: def, special: special,
+          key: key, def: def, special: special, specialKind: specialKind,
           x: PAD_X, y: FLOOR - def.r,
           vx: 0, vy: 0, angle: 0, spin: 0,
           state: "ready", // ready | aiming | flying | done
@@ -640,6 +705,8 @@
         state = "playing";
         startScreen.style.display = "none";
         endScreen.style.display = "none";
+        stopConfetti();
+        if (facePeek) facePeek.style.display = "none";
         if (muteBtn) muteBtn.style.display = "";
       }
 
@@ -746,9 +813,95 @@
         endCats.textContent = names.length
           ? "入れた猫：" + names.map(function (n) { return n + " ×" + counts[n]; }).join("、")
           : "入れた猫：なし（つぎは きっと 入る）";
+        shareText = "にゃんシュートで " + score + "点！" +
+          playMem + "回目の挑戦で、ゴール " + goals + " 本。" +
+          (names.length ? "入れた猫：" + names.join("、") + "。" : "") +
+          " #カギしっぽバスケ部";
         endScreen.style.display = "flex";
+        celebrate();
         // 音ボタンが結果カードの上に重なって点数のじゃまをしないよう隠す
         if (muteBtn) muteBtn.style.display = "none";
+      }
+
+      // ===== 終わりの画面のお祝い（紙吹雪・部員の顔）とシェア =====
+      var shareText = "";
+      var confettiPieces = [];
+      var confettiTimer = null;
+      function startConfetti(count) {
+        stopConfetti();
+        var cctx = confettiCanvas.getContext("2d");
+        var colors = ["#e74c3c", "#f39c12", "#2ecc71", "#3498db", "#ff6b9d", "#ffd94d"];
+        confettiPieces = [];
+        for (var i = 0; i < count; i++) {
+          confettiPieces.push({
+            x: Math.random() * 720, y: -30 - Math.random() * 500,
+            w: 8 + Math.random() * 8, h: 5 + Math.random() * 6,
+            vy: 130 + Math.random() * 160, vx: -30 + Math.random() * 60,
+            rot: Math.random() * Math.PI, vr: -3 + Math.random() * 6,
+            color: colors[i % colors.length]
+          });
+        }
+        var last = null;
+        function tick(ts) {
+          if (last === null) last = ts;
+          var dt = Math.min(0.05, (ts - last) / 1000);
+          last = ts;
+          cctx.clearRect(0, 0, 720, 1080);
+          var alive = false;
+          confettiPieces.forEach(function (p) {
+            p.y += p.vy * dt;
+            p.x += p.vx * dt + Math.sin(p.y / 40) * 0.6;
+            p.rot += p.vr * dt;
+            if (p.y < 1120) alive = true;
+            cctx.save();
+            cctx.translate(p.x, p.y);
+            cctx.rotate(p.rot);
+            cctx.fillStyle = p.color;
+            cctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            cctx.restore();
+          });
+          if (alive) { confettiTimer = requestAnimationFrame(tick); }
+          else { stopConfetti(); }
+        }
+        confettiTimer = requestAnimationFrame(tick);
+      }
+      function stopConfetti() {
+        if (confettiTimer !== null) { cancelAnimationFrame(confettiTimer); confettiTimer = null; }
+        if (confettiCanvas) confettiCanvas.getContext("2d").clearRect(0, 0, 720, 1080);
+      }
+      function showFacePeek(all) {
+        facePeek.innerHTML = "";
+        var keys = all ? CAT_KEYS : ["dora", "tama", "mike"];
+        var spots = [
+          { left: "-14px", top: "12%" }, { right: "-14px", top: "30%" },
+          { left: "-14px", bottom: "16%" }, { right: "-14px", bottom: "6%" },
+          { left: "6%", top: "-16px" }, { right: "8%", top: "-16px" }
+        ];
+        keys.forEach(function (k, i) {
+          var img = document.createElement("img");
+          img.src = CATS[k].img;
+          img.alt = "";
+          var size = 74 + (i % 3) * 10;
+          img.style.width = size + "px";
+          img.style.height = size + "px";
+          var spot = spots[i % spots.length];
+          for (var prop in spot) img.style[prop] = spot[prop];
+          img.style.animationDelay = (i * 0.18) + "s";
+          facePeek.appendChild(img);
+        });
+        facePeek.style.display = "block";
+      }
+      function celebrate() {
+        if (score >= 10000) { startConfetti(150); showFacePeek(true); }
+        else if (score >= 8000) { showFacePeek(false); }
+        else if (score >= 5000) { startConfetti(40); }
+      }
+      if (shareBtn) {
+        shareBtn.addEventListener("click", function () {
+          var url = "https://twitter.com/intent/tweet?text=" +
+            encodeURIComponent(shareText + "\nhttps://kagishippo-bb.github.io/nyubu/nyan-shoot.html");
+          window.open(url, "_blank");
+        });
       }
 
       // ===== 画面の動きを止める（LINE内ブラウザ対策） =====
@@ -1110,11 +1263,11 @@
         // ふれず）で2倍、ラスト10秒で2倍（両方なら4倍）
         var inLast = !!cat.lastTen || (state === "playing" && !timeUp && timeLeft <= 10);
         var clean = !cat.hitRim && !cat.hitBoard;
-        var pts = cat.special ? 500 : cat.def.score;
+        var pts = cat.special ? (cat.specialKind === "tama" ? 1000 : 500) : cat.def.score;
         if (clean) pts *= 2;
         if (inLast) pts *= 2;
         score += pts;
-        scoredList.push(cat.special ? "カギしっぽのドラ" : cat.def.name);
+        scoredList.push(cat.special ? specialName(cat.specialKind) : cat.def.name);
         playGoal(combo, inLast);
         // ごほうびを大きく：ネットが大きく揺れて、入れた猫が一回転する
         netSwingV += 24;
@@ -1264,10 +1417,10 @@
           var sdt2 = dt / sub2;
           for (var si = 0; si < sub2; si++) stepCat(sdt2);
           cat = activeCat;
-          if (oldCat.lingerT > 0.85) {
-            oldCat.alpha = Math.max(0, oldCat.alpha - dt * 1.5);
+          if (oldCat.lingerT > 0.25) {
+            oldCat.alpha = Math.max(0, oldCat.alpha - dt * 3);
           }
-          if (oldCat.alpha <= 0 || oldCat.lingerT > 3.2) lingering.splice(li, 1);
+          if (oldCat.alpha <= 0 || oldCat.lingerT > 1.5) lingering.splice(li, 1);
         }
         // 粒とポップ
         for (var j = particles.length - 1; j >= 0; j--) {
@@ -1549,7 +1702,7 @@
         ctx.font = "700 19px 'M PLUS Rounded 1c', sans-serif";
         ctx.fillText(nextSpecial ? "つぎ とくべつ" : "つぎ", W - 96, HUD_TOP + 24);
         ctx.font = "700 18px 'M PLUS Rounded 1c', sans-serif";
-        ctx.fillText(nextSpecial ? "カギしっぽのドラ" : nd.name, W - 96, HUD_TOP + 55);
+        ctx.fillText(nextSpecial ? specialName(nextSpecialKind) : nd.name, W - 96, HUD_TOP + 55);
         if (nextSpecial) {
           ctx.save();
           ctx.strokeStyle = "#ffd94d";
