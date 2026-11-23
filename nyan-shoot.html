@@ -1417,10 +1417,10 @@
           var sdt2 = dt / sub2;
           for (var si = 0; si < sub2; si++) stepCat(sdt2);
           cat = activeCat;
-          if (oldCat.lingerT > 0.25) {
-            oldCat.alpha = Math.max(0, oldCat.alpha - dt * 3);
+          if (oldCat.lingerT > 0.1) {
+            oldCat.alpha = Math.max(0, oldCat.alpha - dt * 5);
           }
-          if (oldCat.alpha <= 0 || oldCat.lingerT > 1.5) lingering.splice(li, 1);
+          if (oldCat.alpha <= 0 || oldCat.lingerT > 1.0) lingering.splice(li, 1);
         }
         // 粒とポップ
         for (var j = particles.length - 1; j >= 0; j--) {
@@ -1858,10 +1858,6 @@
           ctx.fillStyle = "#ffd94d";
           ctx.fillText("ナイスシュート！", 0, 0);
           ctx.restore();
-          // 部員の顔が右下の隅から顔を出す
-          var peek = nProg * 58;
-          var pd = CATS[niceKey];
-          drawCatFace(ctx, pd, W - 66 + (58 - peek), FLOOR - 52, 46, -0.15, 0, 0, Math.min(1, niceT / 0.4), false);
         }
         // 「残り10秒」（残り10秒に入った直後）
         if (lastSpurtT > 0 && state === "playing") {
