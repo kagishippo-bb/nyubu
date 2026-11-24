@@ -317,6 +317,64 @@
         cursor: pointer;
       }
       #shareBtn:active { transform: scale(0.96); }
+      #imgSaveBtn {
+        font-family: inherit;
+        display: block;
+        margin: 10px auto 0;
+        font-size: clamp(15px, 4.6vw, 19px);
+        font-size: clamp(15px, 4.4cqw, 19px);
+        font-weight: 800;
+        background: #fff;
+        color: var(--ink);
+        border: 2px solid var(--ink);
+        border-radius: 999px;
+        padding: 9px 26px;
+        min-height: 48px;
+        cursor: pointer;
+      }
+      #imgSaveBtn:active { transform: scale(0.96); }
+      #cardImgView {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 5;
+        background: rgba(36, 26, 18, 0.82);
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+      #cardImgView img {
+        max-width: 94%;
+        max-height: 62%;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      }
+      #cardImgView .note {
+        color: #fff8ec;
+        font-weight: 800;
+        font-size: clamp(15px, 4.6vw, 19px);
+        font-size: clamp(15px, 4.4cqw, 19px);
+        margin: 14px 0 10px;
+        text-align: center;
+      }
+      #cardImgClose {
+        font-family: inherit;
+        font-size: clamp(14px, 4.2vw, 17px);
+        font-size: clamp(14px, 4cqw, 17px);
+        font-weight: 800;
+        background: #fff8ec;
+        color: #4a3220;
+        border: none;
+        border-radius: 999px;
+        padding: 9px 26px;
+        min-height: 44px;
+        cursor: pointer;
+      }
+      #cardImgClose:active { transform: scale(0.96); }
       #endCard .feedback {
         font-size: clamp(12px, 3.6vw, 14px);
         font-size: clamp(12px, 3.4cqw, 14px);
@@ -422,8 +480,14 @@
             <p class="cats" id="endCats"></p>
             <button id="againBtn" type="button">もう一度</button>
             <button id="shareBtn" type="button">結果をシェア</button>
+            <button id="imgSaveBtn" type="button">結果を画像で保存</button>
             <p class="club">カギしっぽバスケ部</p>
             <p class="feedback">遊んだ感想や、こうしたらもっと楽しい、を教えてください。次の直しの参考にさせてもらいます</p>
+          </div>
+          <div id="cardImgView">
+            <img id="cardImgViewImg" alt="にゃんシュートの結果カード" />
+            <p class="note">画像を長押しで保存できます</p>
+            <button id="cardImgClose" type="button">とじる</button>
           </div>
         </div>
       </div>
@@ -905,6 +969,226 @@
             encodeURIComponent(shareText + "\nhttps://kagishippo-bb.github.io/nyubu/nyan-shoot.html");
           window.open(url, "_blank");
         });
+      }
+
+      // ===== 結果を画像で保存（1200×630の結果カードを作る） =====
+      var imgSaveBtn = document.getElementById("imgSaveBtn");
+      var cardImgView = document.getElementById("cardImgView");
+      var cardImgViewImg = document.getElementById("cardImgViewImg");
+      var cardImgClose = document.getElementById("cardImgClose");
+      if (cardImgClose && cardImgView) {
+        cardImgClose.addEventListener("click", function () {
+          cardImgView.style.display = "none";
+        });
+      }
+      // 入れた猫の表示名 → 猫のキー。特別な猫は「カギしっぽの○○」の形で来る
+      function cardCatEntry(name) {
+        var special = false;
+        var base = name;
+        if (name.indexOf("カギしっぽの") === 0) {
+          special = true;
+          base = name.substring(6);
+        }
+        for (var i = 0; i < CAT_KEYS.length; i++) {
+          if (CATS[CAT_KEYS[i]].name === base) return { key: CAT_KEYS[i], special: special };
+        }
+        return null;
+      }
+      function cardRoundRect(g, x, y, w, h, r) {
+        g.beginPath();
+        g.moveTo(x + r, y);
+        g.lineTo(x + w - r, y);
+        g.arcTo(x + w, y, x + w, y + r, r);
+        g.lineTo(x + w, y + h - r);
+        g.arcTo(x + w, y + h, x + w - r, y + h, r);
+        g.lineTo(x + r, y + h);
+        g.arcTo(x, y + h, x, y + h - r, r);
+        g.lineTo(x, y + r);
+        g.arcTo(x, y, x + r, y, r);
+        g.closePath();
+      }
+      function buildResultCard(done) {
+        // 入れた猫を種類ごとにまとめる（終わり画面と同じ数え方）
+        var counts = {};
+        scoredList.forEach(function (n) { counts[n] = (counts[n] || 0) + 1; });
+        var entries = [];
+        Object.keys(counts).forEach(function (n) {
+          var e = cardCatEntry(n);
+          if (e) entries.push({ name: n, count: counts[n], key: e.key, special: e.special });
+        });
+        // 顔画像の読み込み待ち（通常はプレイ中に読み込み済み）
+        var pending = [];
+        entries.forEach(function (e) {
+          var im = CATS[e.key].image;
+          if (im && (!im.complete || !im.naturalWidth)) pending.push(im);
+        });
+        var fired = false;
+        function go() {
+          if (fired) return;
+          fired = true;
+          done(drawResultCard(entries));
+        }
+        if (pending.length) {
+          var left = pending.length;
+          pending.forEach(function (im) {
+            im.onload = function () { left--; if (left <= 0) go(); };
+            im.onerror = function () { left--; if (left <= 0) go(); };
+          });
+          setTimeout(go, 1500);
+        } else {
+          go();
+        }
+      }
+      function drawResultCard(entries) {
+        var cv = document.createElement("canvas");
+        cv.width = 1200;
+        cv.height = 630;
+        var g = cv.getContext("2d");
+        var FONT = '"M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", "Hiragino Sans", sans-serif';
+        // 背景（クリーム色）とカード
+        g.fillStyle = "#f3e2c7";
+        g.fillRect(0, 0, 1200, 630);
+        cardRoundRect(g, 36, 36, 1128, 558, 28);
+        g.fillStyle = "#fff8ec";
+        g.fill();
+        g.lineWidth = 3;
+        g.strokeStyle = "rgba(74, 50, 32, 0.25)";
+        g.stroke();
+        g.fillStyle = "#4a3220";
+        // 上の飾り帯（アクセント色）
+        g.fillStyle = "#e2703a";
+        g.fillRect(76, 76, 64, 10);
+        g.fillStyle = "#4a3220";
+        // 部名と日付
+        g.font = "800 27px " + FONT;
+        g.textAlign = "left";
+        g.fillText("カギしっぽバスケ部", 76, 132);
+        var now = new Date();
+        g.textAlign = "right";
+        g.fillText((now.getMonth() + 1) + "月" + now.getDate() + "日", 1124, 132);
+        g.textAlign = "left";
+        // タイトル
+        g.font = "800 68px " + FONT;
+        g.fillText("にゃんシュート", 76, 208);
+        // 点数（大きく）
+        g.font = "800 148px " + FONT;
+        var scoreText = String(score);
+        g.fillText(scoreText, 72, 356);
+        var sw = g.measureText(scoreText).width;
+        g.font = "800 54px " + FONT;
+        g.fillText("点", 84 + sw, 356);
+        // 成績
+        g.font = "800 37px " + FONT;
+        g.fillText("ゴール " + goals + " 本 ・ れんぞく " + bestCombo + " 回", 76, 434);
+        g.font = "700 31px " + FONT;
+        g.globalAlpha = 0.85;
+        g.fillText(playMem + "回目の挑戦 ・ 部の最高は11850点", 76, 484);
+        g.globalAlpha = 1;
+        // 入れた猫（右側に顔を並べる）
+        g.font = "800 28px " + FONT;
+        g.fillText("入れた猫", 756, 208);
+        if (!entries.length) {
+          g.font = "700 28px " + FONT;
+          g.globalAlpha = 0.8;
+          g.fillText("なし（つぎは きっと 入る）", 756, 258);
+          g.globalAlpha = 1;
+        }
+        entries.forEach(function (e, i) {
+          var col = i % 4;
+          var row = Math.floor(i / 4);
+          var cx = 800 + col * 100;
+          var cy = 262 + row * 122;
+          var im = CATS[e.key].image;
+          // 特別な猫（カギしっぽの○○）は金色の光と輪
+          if (e.special) {
+            g.save();
+            g.globalAlpha = 0.55;
+            g.fillStyle = "#ffd94d";
+            g.beginPath();
+            g.arc(cx, cy, 52, 0, Math.PI * 2);
+            g.fill();
+            g.restore();
+          }
+          g.save();
+          g.beginPath();
+          g.arc(cx, cy, 44, 0, Math.PI * 2);
+          g.clip();
+          if (im && im.complete && im.naturalWidth) {
+            g.drawImage(im, cx - 44, cy - 44, 88, 88);
+          } else {
+            g.fillStyle = "#f3e2c7";
+            g.fillRect(cx - 44, cy - 44, 88, 88);
+          }
+          g.restore();
+          g.lineWidth = e.special ? 5 : 3;
+          g.strokeStyle = e.special ? "#ffbf1f" : "rgba(74, 50, 32, 0.35)";
+          g.beginPath();
+          g.arc(cx, cy, 44, 0, Math.PI * 2);
+          g.stroke();
+          // 入れた数（×n）
+          g.font = "800 25px " + FONT;
+          g.textAlign = "center";
+          g.fillStyle = "#4a3220";
+          g.fillText("×" + e.count, cx, cy + 72);
+          g.textAlign = "left";
+        });
+        // 下の段：URLとハッシュタグ
+        g.font = "700 26px " + FONT;
+        g.globalAlpha = 0.8;
+        g.fillText("kagishippo-bb.github.io/nyubu/nyan-shoot.html", 76, 560);
+        g.globalAlpha = 1;
+        g.font = "800 27px " + FONT;
+        g.textAlign = "right";
+        g.fillText("#カギしっぽバスケ部", 1124, 560);
+        g.textAlign = "left";
+        return cv;
+      }
+      function showResultCardInPage(cv) {
+        if (!cardImgView || !cardImgViewImg) return;
+        try {
+          cardImgViewImg.src = cv.toDataURL("image/png");
+          cardImgView.style.display = "flex";
+        } catch (e) { /* 画面表示も無理な場合は何もしない */ }
+      }
+      function downloadResultCard(cv) {
+        try {
+          var url = cv.toDataURL("image/png");
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = "nyan-shoot-result.png";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        } catch (e) {
+          showResultCardInPage(cv);
+        }
+      }
+      function saveResultImage() {
+        buildResultCard(function (cv) {
+          var filename = "nyan-shoot-result.png";
+          if (cv.toBlob && navigator.share && navigator.canShare) {
+            cv.toBlob(function (blob) {
+              if (!blob) { downloadResultCard(cv); return; }
+              var file = null;
+              try { file = new File([blob], filename, { type: "image/png" }); } catch (e) { file = null; }
+              var can = false;
+              try { can = !!file && navigator.canShare({ files: [file] }); } catch (e) { can = false; }
+              if (can) {
+                navigator.share({ files: [file] }).then(function () {}, function (err) {
+                  // 共有シートを自分で閉じただけなら何もしない。それ以外は保存に切り替える
+                  if (!err || err.name !== "AbortError") downloadResultCard(cv);
+                });
+              } else {
+                downloadResultCard(cv);
+              }
+            }, "image/png");
+          } else {
+            downloadResultCard(cv);
+          }
+        });
+      }
+      if (imgSaveBtn) {
+        imgSaveBtn.addEventListener("click", function () { saveResultImage(); });
       }
 
       // ===== 画面の動きを止める（LINE内ブラウザ対策） =====
