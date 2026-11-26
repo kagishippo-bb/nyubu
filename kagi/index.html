@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#F6EAD6">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2712%27 r=%277%27 fill=%27%23E0B14A%27 stroke=%27%236B4332%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2712%27 r=%273%27 fill=%27%23F3E2C8%27/%3E%3Crect x=%2714%27 y=%2718%27 width=%274%27 height=%2710%27 rx=%271%27 fill=%27%23E0B14A%27 stroke=%27%236B4332%27 stroke-width=%271.5%27/%3E%3C/svg%3E">
+<title>カギしっぽバスケ部　第79話「カギのもよう」</title>
+<style>
+  :root {
+    --bg: #F3E2C8;
+    --bg-2: #FBF3E4;
+    --ink: #4A3124;
+    --ink-soft: #7A5640;
+    --line: #6B4332;
+    --paper: #FFF8EE;
+    --pink: #F7DDE3;
+    --gold: #E0B14A;
+    --gold-deep: #B07A1A;
+    --ribbon: #D64545;
+    --btn: #C45C3A;
+    --btn-ink: #FFF8EE;
+    --shadow: 0 10px 28px rgba(74, 49, 36, 0.14);
+    --safe-t: env(safe-area-inset-top, 0px);
+    --safe-b: env(safe-area-inset-bottom, 0px);
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    height: 100dvh;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Hiragino Maru Gothic ProN", "Hiragino Sans", "Yu Gothic", "YuGothic", "Noto Sans CJK JP", "Noto Sans JP", sans-serif;
+    overflow: hidden;
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background:
+      radial-gradient(120% 70% at 50% 0%, #FFF6E8 0%, transparent 55%),
+      repeating-linear-gradient(180deg, rgba(107,67,50,0.03) 0 2px, transparent 2px 4px),
+      var(--bg);
+  }
+
+  .app {
+    height: 100%;
+    height: 100dvh;
+    max-width: 430px;
+    margin: 0 auto;
+    padding: calc(12px + var(--safe-t)) 18px calc(16px + var(--safe-b));
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  header {
+    text-align: center;
+    flex: 0 0 auto;
+    position: relative;
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: #fff;
+    background: var(--ribbon);
+    border-radius: 999px;
+    padding: 2px 8px;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+
+  .club {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--ink-soft);
+    margin: 0 0 4px;
+  }
+
+  h1 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 0.04em;
+    line-height: 1.35;
+  }
+
+  h1 span {
+    font-weight: 400;
+    font-size: 13px;
+    color: var(--ink-soft);
+    display: block;
+    letter-spacing: 0.08em;
+    margin-bottom: 2px;
+  }
+
+  .sound-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid rgba(107, 67, 50, 0.25);
+    background: var(--paper);
+    border-radius: 50%;
+    color: var(--ink);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0;
+  }
+
+  .app {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .ep-slot {
+    flex: 0 0 auto;
+    width: min(42vw, 200px);
+    margin: 8px auto 0;
+    text-align: center;
+  }
+
+  .ep-label {
+    margin: 0 0 4px;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--ink-soft);
+    font-weight: 700;
+  }
+
+  .ep-frame {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ep-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+  }
+
+  .ep-ph {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 12px;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    background:
+      radial-gradient(circle at 50% 40%, rgba(224, 177, 74, 0.16), transparent 62%),
+      var(--paper);
+  }
+
+  .ep-ph[hidden],
+  .ep-frame img[hidden] { display: none; }
+
+  body.is-open .ep-slot { width: 72px; margin-top: 6px; }
+  body.is-open .ep-frame { border-radius: 10px; border-width: 1.5px; }
+  body.is-open .ep-label { font-size: 9px; margin-bottom: 3px; }
+  /* Keep the small frame tidy: the 「本編 ①」 label already names the slot. */
+  body.is-open .ep-ph { color: transparent; font-size: 0; }
+
+  .foot {
+    flex: 0 0 auto;
+    text-align: center;
+    margin: 10px 0 0;
+    font-size: 12px;
+  }
+
+  .foot a {
+    color: var(--ink-soft);
+    letter-spacing: 0.1em;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .stage-wrap {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: flex 0.5s ease;
+  }
+
+  body.is-open .stage-wrap {
+    flex: 0 1 auto;
+  }
+
+  .stage {
+    width: 100%;
+    max-height: 100%;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: grab;
+    position: relative;
+  }
+
+  .stage.is-dragging { cursor: grabbing; }
+
+  .stage svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-height: 40dvh;
+    overflow: visible;
+    filter: drop-shadow(0 8px 14px rgba(74, 49, 36, 0.12));
+  }
+
+  body.is-open .stage svg { max-height: 16dvh; }
+  body.is-open .hint { display: none; }
+  body.is-open .dots { margin-top: 2px; }
+
+  #key-group.ticking {
+    animation: keyTick 0.22s ease-out;
+  }
+
+  #key-group.unlocking {
+    animation: keyUnlock 0.7s cubic-bezier(0.2, 0.85, 0.25, 1.15) both;
+  }
+
+  @keyframes keyTick {
+    0% { filter: brightness(1); }
+    40% { filter: brightness(1.25); }
+    100% { filter: brightness(1); }
+  }
+
+  @keyframes keyUnlock {
+    0% { filter: brightness(1); }
+    35% { filter: brightness(1.45) drop-shadow(0 0 8px #F6D36A); }
+    100% { filter: brightness(1.1); }
+  }
+
+  .hint {
+    text-align: center;
+    margin: 4px 0 0;
+    color: var(--ink-soft);
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    flex: 0 0 auto;
+  }
+
+  .hint strong {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  .dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 8px 0 0;
+  }
+
+  .dots i {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1.5px solid var(--gold-deep);
+    background: transparent;
+    display: block;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .dots i.on {
+    background: var(--gold);
+    transform: scale(1.15);
+  }
+
+  .spark {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #F6D36A;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .result {
+    flex: 0 0 auto;
+    display: none;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  body.is-open .result {
+    display: block;
+    animation: slideOut 0.55s cubic-bezier(0.22, 0.9, 0.28, 1) both;
+  }
+
+  @keyframes slideOut {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel {
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: 16px;
+    padding: 10px 10px 12px;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+
+  .panel-label {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    color: var(--ribbon);
+    font-weight: 700;
+    margin: 0 0 6px 4px;
+  }
+
+  .art {
+    position: relative;
+    background: #F6E4EA;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1.5px solid rgba(107, 67, 50, 0.2);
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .art img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 28dvh;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .art-note {
+    position: absolute;
+    left: 50%;
+    bottom: 8px;
+    transform: translateX(-50%);
+    background: rgba(74, 49, 36, 0.86);
+    color: #FFF8EE;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+    pointer-events: none;
+    max-width: calc(100% - 16px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .bubble {
+    margin-top: 10px;
+    background: var(--pink);
+    border: 2px solid var(--line);
+    border-radius: 16px 16px 16px 6px;
+    padding: 10px 14px 12px;
+    position: relative;
+  }
+
+  .who {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+    font-weight: 700;
+    margin: 0 0 2px;
+  }
+
+  .line {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.55;
+    letter-spacing: 0.03em;
+  }
+
+  .actions {
+    display: none;
+    margin-top: 12px;
+    text-align: center;
+    flex: 0 0 auto;
+  }
+
+  body.is-open .actions { display: block; }
+
+  .again {
+    appearance: none;
+    border: none;
+    background: var(--btn);
+    color: var(--btn-ink);
+    font: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 12px 22px;
+    border-radius: 999px;
+    width: 100%;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #8A3A24, 0 8px 16px rgba(74, 49, 36, 0.15);
+  }
+
+  .again:active { transform: translateY(2px); box-shadow: 0 2px 0 #8A3A24; }
+
+  .share {
+    margin: 10px 0 0;
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 0.03em;
+    line-height: 1.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #key-group.ticking, #key-group.unlocking,
+    body.is-open .result { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <p class="club">カギしっぽバスケ部</p>
+      <h1><span>第79話</span>カギのもよう</h1>
+      <button type="button" class="sound-btn" id="soundBtn" aria-label="音を切る" title="音">🔊</button>
+    </header>
+
+    <div class="ep-slot" id="epSlot">
+      <p class="ep-label">本編 ①</p>
+      <div class="ep-frame">
+        <img id="epImg" src="ep79_1.png" alt="第79話の①" width="1024" height="1024" hidden>
+        <div class="ep-ph" id="epPh">本編79①が入ります</div>
+      </div>
+    </div>
+
+    <div class="stage-wrap">
+      <div class="stage" id="stage" role="application" aria-label="しっぽのカギ。指でまわすか、タップしてください。">
+        <svg viewBox="0 0 320 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="fur" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#FFF7EC"/>
+              <stop offset="100%" stop-color="#F0D4B0"/>
+            </linearGradient>
+            <linearGradient id="tailFur" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#F6E0C4"/>
+              <stop offset="100%" stop-color="#E8C49A"/>
+            </linearGradient>
+            <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#F6E27A"/>
+              <stop offset="45%" stop-color="#E0B14A"/>
+              <stop offset="100%" stop-color="#A8741C"/>
+            </linearGradient>
+            <linearGradient id="goldShine" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#FFF4B0" stop-opacity="0.85"/>
+              <stop offset="55%" stop-color="#E0B14A" stop-opacity="0"/>
+            </linearGradient>
+            <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+              <feDropShadow dx="0" dy="2" stdDeviation="1.4" flood-color="#6B4332" flood-opacity="0.25"/>
+            </filter>
+          </defs>
+
+          <!-- floor shadow -->
+          <ellipse cx="150" cy="372" rx="92" ry="12" fill="#6B4332" opacity="0.16"/>
+
+          <!-- cat, back view, simple and unmarked -->
+          <g filter="url(#soft)">
+            <!-- hind legs / haunches -->
+            <ellipse cx="112" cy="292" rx="32" ry="40" fill="url(#fur)" stroke="#6B4332" stroke-width="3"/>
+            <ellipse cx="168" cy="292" rx="32" ry="40" fill="url(#fur)" stroke="#6B4332" stroke-width="3"/>
+            <!-- body -->
+            <ellipse cx="140" cy="230" rx="68" ry="78" fill="url(#fur)" stroke="#6B4332" stroke-width="3"/>
+            <!-- head from behind -->
+            <ellipse cx="140" cy="138" rx="50" ry="46" fill="url(#fur)" stroke="#6B4332" stroke-width="3"/>
+            <!-- ears -->
+            <path d="M100 120 L90 84 Q118 86 126 116 Z" fill="url(#fur)" stroke="#6B4332" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M180 120 L194 84 Q166 86 154 116 Z" fill="url(#fur)" stroke="#6B4332" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M104 116 L100 94 Q118 96 122 114 Z" fill="#F4B6B0"/>
+            <path d="M176 116 L184 94 Q166 96 158 114 Z" fill="#F4B6B0"/>
+            <!-- small back markings, generic, not a character sheet -->
+            <ellipse cx="140" cy="210" rx="18" ry="14" fill="#E8C49A" opacity="0.7"/>
+          </g>
+
+          <!-- hooked tail: short hook, key sits in the curl -->
+          <g filter="url(#soft)">
+            <path d="M196 250
+                     C 230 258, 258 280, 272 310
+                     C 284 338, 268 358, 242 350
+                     C 218 342, 214 318, 230 304
+                     C 244 292, 258 292, 262 304"
+                  fill="none" stroke="#6B4332" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M196 250
+                     C 230 258, 258 280, 272 310
+                     C 284 338, 268 358, 242 350
+                     C 218 342, 214 318, 230 304
+                     C 244 292, 258 292, 262 304"
+                  fill="none" stroke="url(#tailFur)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+
+          <!-- rotatable key. rotation center = 236, 248 (the hook / "lock") -->
+          <g id="key-group">
+            <!-- generous hit area -->
+            <circle cx="236" cy="248" r="78" fill="transparent"/>
+            <!-- shaft from bow toward the hook center -->
+            <g>
+              <!-- shadow -->
+              <g opacity="0.18" transform="translate(2,3)">
+                <rect x="228" y="188" width="16" height="68" rx="6" fill="#4A3124"/>
+                <circle cx="236" cy="176" r="32" fill="#4A3124"/>
+              </g>
+              <!-- bow (round handle, hole in the middle) -->
+              <circle cx="236" cy="176" r="32" fill="url(#gold)" stroke="#6B4332" stroke-width="3"/>
+              <circle cx="236" cy="176" r="14" fill="#F3E2C8" stroke="#6B4332" stroke-width="3"/>
+              <circle cx="236" cy="176" r="32" fill="url(#goldShine)"/>
+              <!-- collar -->
+              <rect x="224" y="204" width="24" height="12" rx="3" fill="url(#gold)" stroke="#6B4332" stroke-width="2.5"/>
+              <!-- shaft -->
+              <rect x="229" y="212" width="14" height="42" rx="5" fill="url(#gold)" stroke="#6B4332" stroke-width="2.5"/>
+              <!-- two bits (昔の鍵・歯2つ), just above the lock point -->
+              <rect x="241" y="228" width="22" height="10" rx="2" fill="url(#gold)" stroke="#6B4332" stroke-width="2.2"/>
+              <rect x="241" y="242" width="16" height="10" rx="2" fill="url(#gold)" stroke="#6B4332" stroke-width="2.2"/>
+              <!-- shine on shaft -->
+              <rect x="232" y="216" width="4" height="30" rx="2" fill="#FFF4B0" opacity="0.45"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <p class="hint" id="hint"><strong>しっぽのカギを、まわしてね</strong><br>指でまわす　／　タップでもOK</p>
+      <div class="dots" id="dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    </div>
+
+    <section class="result" id="result" aria-live="polite">
+      <div class="panel">
+        <p class="panel-label">そのあと</p>
+        <div class="art">
+          <img src="ep79_1.png" alt="第79話の①">
+        </div>
+        <div class="bubble">
+          <p class="who" id="who"></p>
+          <p class="line" id="line"></p>
+        </div>
+      </div>
+    </section>
+
+    <div class="actions" id="actions">
+      <button type="button" class="again" id="again">もう一回まわす</button>
+      <p class="share">どの一言が出た？コメントで教えてね🐾</p>
+    </div>
+
+  </div>
+
+<script>
+(function () {
+  var LINES = [
+    { who: "ドラ", text: "ミケのしっぽは、カギだったのか。" },
+    { who: "タマ", text: "‥え？　ミケちゃんのしっぽ、カギになってる…！" },
+    { who: "ミケ", text: "え、これ？　ふだんはリボンでかくしてただけだよ、ドラくん。" },
+    { who: "タダシ", text: "しっぽのもよう、立派なカギでございました。" },
+    { who: "ツムジ", text: "…いいもようだね。" },
+    { who: "ギンゾー監督", text: "うん。ミケちゃんのしっぽは、ちゃんとカギしっぽだよ。" }
+  ];
+
+  var ORIGIN = { x: 236, y: 248 };
+  var TURN = 360;
+  var key = document.getElementById("key-group");
+  var stage = document.getElementById("stage");
+  var dots = document.getElementById("dots").children;
+  var soundBtn = document.getElementById("soundBtn");
+  var whoEl = document.getElementById("who");
+  var lineEl = document.getElementById("line");
+
+  var angle = 0;          // displayed degrees
+  var accumulated = 0;    // absolute travel toward unlock
+  var unlocked = false;
+  var dragging = false;
+  var lastPtrAngle = 0;
+  var startX = 0, startY = 0, startTime = 0, moved = 0;
+  var lastNotch = 0;
+  var lastLineIndex = -1;
+  var muted = false;
+  var audioCtx = null;
+  var animating = false;
+  var prefersReduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var idleOn = true;
+
+  var idleRaf = null;
+
+  function setKeyTransform(deg, withTransition) {
+    if (withTransition) {
+      key.style.transition = prefersReduce ? "none" : "transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1.12)";
+    } else {
+      key.style.transition = "none";
+    }
+    // SVG attribute keeps the pivot in user units and is reliable on iOS Safari.
+    // Do not set a CSS transform: it overrides the SVG attribute, even when "none".
+    key.style.removeProperty("transform");
+    key.style.removeProperty("transition");
+    key.setAttribute("transform", "rotate(" + deg + " " + ORIGIN.x + " " + ORIGIN.y + ")");
+  }
+
+  function stopIdle() {
+    idleOn = false;
+    if (idleRaf) {
+      cancelAnimationFrame(idleRaf);
+      idleRaf = null;
+    }
+    key.classList.remove("idle");
+  }
+
+  function setIdle(on) {
+    if (on && !unlocked && !dragging && !animating && !prefersReduce) {
+      idleOn = true;
+      key.classList.add("idle");
+      if (idleRaf) cancelAnimationFrame(idleRaf);
+      var t0 = performance.now();
+      function frame(now) {
+        if (!idleOn) return;
+        var deg = Math.sin((now - t0) / 2800 * Math.PI * 2) * 7;
+        key.style.transition = "none";
+        key.setAttribute("transform", "rotate(" + deg + " " + ORIGIN.x + " " + ORIGIN.y + ")");
+        idleRaf = requestAnimationFrame(frame);
+      }
+      idleRaf = requestAnimationFrame(frame);
+    } else {
+      stopIdle();
+    }
+  }
+
+  function updateDots() {
+    var n = Math.min(4, Math.floor(Math.abs(accumulated) / 90));
+    for (var i = 0; i < 4; i++) {
+      if (n > i) dots[i].classList.add("on");
+      else dots[i].classList.remove("on");
+    }
+  }
+
+  function getCtx() {
+    if (muted) return null;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    if (!audioCtx) audioCtx = new AC();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+    return audioCtx;
+  }
+
+  function playTick() {
+    var ctx = getCtx();
+    if (!ctx) return;
+    var t = ctx.currentTime;
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(1500, t);
+    osc.frequency.exponentialRampToValueAtTime(520, t + 0.045);
+    gain.gain.setValueAtTime(0.07, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + 0.05);
+  }
+
+  function playUnlock() {
+    var ctx = getCtx();
+    if (!ctx) return;
+    var t = ctx.currentTime;
+    function tone(freq, start, dur, vol) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(freq, t + start);
+      gain.gain.setValueAtTime(0.0001, t + start);
+      gain.gain.exponentialRampToValueAtTime(vol, t + start + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + start + dur);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t + start);
+      osc.stop(t + start + dur + 0.02);
+    }
+    tone(660, 0, 0.12, 0.08);
+    tone(880, 0.08, 0.16, 0.09);
+    tone(1320, 0.16, 0.22, 0.07);
+  }
+
+  function tickFeedback() {
+    playTick();
+    if (prefersReduce) return;
+    key.classList.remove("ticking");
+    void key.offsetWidth;
+    key.classList.add("ticking");
+    setTimeout(function () { key.classList.remove("ticking"); }, 240);
+  }
+
+  function checkNotches() {
+    var notch = Math.floor(Math.abs(accumulated) / 90);
+    if (notch > lastNotch && notch <= 4) {
+      lastNotch = notch;
+      if (!unlocked) tickFeedback();
+    }
+  }
+
+  function pickLine(forceIndex) {
+    var i;
+    if (typeof forceIndex === "number") {
+      i = forceIndex;
+    } else {
+      var choices = [];
+      for (var k = 0; k < LINES.length; k++) {
+        if (k !== lastLineIndex) choices.push(k);
+      }
+      i = choices[Math.floor(Math.random() * choices.length)];
+    }
+    lastLineIndex = i;
+    var line = LINES[i];
+    whoEl.textContent = line.who;
+    lineEl.textContent = "「" + line.text + "」";
+  }
+
+  function unlock(opts) {
+    opts = opts || {};
+    if (unlocked) return;
+    unlocked = true;
+    accumulated = TURN;
+    lastNotch = 4;
+    updateDots();
+    setIdle(false);
+    if (typeof opts.angle === "number") {
+      angle = opts.angle;
+      setKeyTransform(angle, !opts.instant);
+    }
+    if (!opts.silent) playUnlock();
+    if (!prefersReduce && !opts.instant) {
+      key.classList.add("unlocking");
+      setTimeout(function () { key.classList.remove("unlocking"); }, 700);
+    }
+    pickLine(opts.lineIndex);
+    document.body.classList.add("is-open");
+    document.getElementById("hint").style.visibility = "hidden";
+  }
+
+  function reset() {
+    unlocked = false;
+    angle = 0;
+    accumulated = 0;
+    lastNotch = 0;
+    animating = false;
+    document.body.classList.remove("is-open");
+    document.getElementById("hint").style.visibility = "visible";
+    updateDots();
+    setKeyTransform(0, true);
+    setTimeout(function () { if (!unlocked && !dragging) setIdle(true); }, 400);
+  }
+
+  function pointerAngle(e) {
+    var svg = stage.querySelector("svg");
+    var ctm = svg.getScreenCTM();
+    if (!ctm) return 0;
+    var p = svg.createSVGPoint();
+    p.x = e.clientX;
+    p.y = e.clientY;
+    var loc = p.matrixTransform(ctm.inverse());
+    return Math.atan2(loc.y - ORIGIN.y, loc.x - ORIGIN.x) * 180 / Math.PI;
+  }
+
+  function applyDelta(delta) {
+    if (unlocked) return;
+    // normalize delta to [-180, 180]
+    while (delta > 180) delta -= 360;
+    while (delta < -180) delta += 360;
+    angle += delta;
+    accumulated += Math.abs(delta);
+    setIdle(false);
+    setKeyTransform(angle, false);
+    updateDots();
+    checkNotches();
+    if (accumulated >= TURN - 8) {
+      unlock({ angle: angle });
+    }
+  }
+
+  function onDown(e) {
+    if (unlocked || animating) return;
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    dragging = true;
+    stage.classList.add("is-dragging");
+    setIdle(false);
+    setKeyTransform(angle, false);
+    lastPtrAngle = pointerAngle(e);
+    startX = e.clientX;
+    startY = e.clientY;
+    startTime = Date.now();
+    moved = 0;
+    try { stage.setPointerCapture(e.pointerId); } catch (err) {}
+    e.preventDefault();
+    getCtx();
+  }
+
+  function onMove(e) {
+    if (!dragging || unlocked) return;
+    var a = pointerAngle(e);
+    var dx = e.clientX - startX;
+    var dy = e.clientY - startY;
+    moved = Math.max(moved, Math.sqrt(dx * dx + dy * dy));
+    applyDelta(a - lastPtrAngle);
+    lastPtrAngle = a;
+    e.preventDefault();
+  }
+
+  function animateTo(target, done) {
+    animating = true;
+    setIdle(false);
+    if (prefersReduce) {
+      setKeyTransform(target, false);
+      angle = target;
+      animating = false;
+      if (done) done();
+      return;
+    }
+    var start = angle;
+    var t0 = performance.now();
+    var dur = 400;
+    var finished = false;
+    function ease(p) {
+      return 1 - Math.pow(1 - p, 3);
+    }
+    function finish() {
+      if (finished) return;
+      finished = true;
+      angle = target;
+      setKeyTransform(target, false);
+      animating = false;
+      if (done) done();
+    }
+    function frame(now) {
+      var p = Math.min(1, (now - t0) / dur);
+      setKeyTransform(start + (target - start) * ease(p), false);
+      if (p < 1) requestAnimationFrame(frame);
+      else finish();
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function onUp(e) {
+    if (!dragging) return;
+    dragging = false;
+    stage.classList.remove("is-dragging");
+    var dt = Date.now() - startTime;
+    var isTap = moved < 12 && dt < 320;
+    if (isTap && !unlocked) {
+      var next = angle + 90;
+      accumulated += 90;
+      updateDots();
+      checkNotches();
+      animateTo(next, function () {
+        if (accumulated >= TURN - 8) unlock({ angle: angle, silent: false });
+      });
+    } else if (!unlocked) {
+      // rest, keep current angle; resume a gentle idle only if almost at 0 and no progress
+      if (Math.abs(accumulated) < 8) setIdle(true);
+    }
+  }
+
+  stage.addEventListener("pointerdown", onDown, { passive: false });
+  window.addEventListener("pointermove", onMove, { passive: false });
+  window.addEventListener("pointerup", onUp);
+  window.addEventListener("pointercancel", onUp);
+  stage.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+
+  document.getElementById("again").addEventListener("click", function () {
+    reset();
+  });
+
+  soundBtn.addEventListener("click", function () {
+    muted = !muted;
+    soundBtn.textContent = muted ? "🔇" : "🔊";
+    soundBtn.setAttribute("aria-label", muted ? "音を出す" : "音を切る");
+    if (!muted) getCtx();
+  });
+
+  (function setupEpisodeSlot() {
+    var img = document.getElementById("epImg");
+    var ph = document.getElementById("epPh");
+    var slot = document.getElementById("epSlot");
+    if (!img || !ph) return;
+    function showArt() {
+      if (!img.naturalWidth) return;
+      img.hidden = false;
+      ph.hidden = true;
+      slot.classList.add("has-art");
+    }
+    function showPh() {
+      img.hidden = true;
+      ph.hidden = false;
+      slot.classList.remove("has-art");
+    }
+    img.addEventListener("load", showArt);
+    img.addEventListener("error", showPh);
+    if (img.complete) {
+      if (img.naturalWidth) showArt();
+      else showPh();
+    }
+  })();
+
+  // initial pose
+  setKeyTransform(0, false);
+  setIdle(true);
+  updateDots();
+
+  // debug: ?unlock=1 shows the open state (fixed first line, for screenshots)
+  var params = new URLSearchParams(location.search);
+  if (params.get("unlock") === "1") {
+    setIdle(false);
+    angle = 360;
+    setKeyTransform(360, false);
+    unlock({ instant: true, silent: true, angle: 360, lineIndex: 0 });
+  }
+
+  // exposed for headless tests
+  window.__kagi = {
+    unlock: function (i) { unlock({ instant: true, silent: true, angle: 360, lineIndex: i || 0 }); },
+    reset: reset,
+    lines: LINES,
+    setAngle: function (deg) {
+      stopIdle();
+      angle = deg;
+      setKeyTransform(deg, false);
+    },
+    getState: function () {
+      return { angle: angle, accumulated: accumulated, unlocked: unlocked, dragging: dragging, idleOn: idleOn };
+    }
+  };
+})();
+</script>
+</body>
+</html>
